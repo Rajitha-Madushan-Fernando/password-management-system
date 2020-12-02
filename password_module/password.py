@@ -2,8 +2,7 @@ from flask import Flask, request, jsonify
 from json import load
 import pyhibp
 from pyhibp import pwnedpasswords as pw
-#from flask.ext.bcrypt import Bcrypt
-#from flask.ext.hashing import Hashing
+import bcrypt
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -88,8 +87,15 @@ class Password:
                 return True
                 print("Make sure your password contain one special charater")
 
+    @staticmethod
+    def hash_pwd(password):
+        updated_password = password.encode("utf-8")
+        password_hash = bcrypt.hashpw(updated_password, bcrypt.gensalt())
+        print (password_hash)
 
-
+    @staticmethod
+    def verify_password(password):
+        return check_password_hash(password_hash, password)
 
 
 

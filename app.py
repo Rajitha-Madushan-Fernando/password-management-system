@@ -31,6 +31,7 @@ def check_pwd():
 
         hibp_result = Password.check_hibp(user_password)
         complexity_result = Password.check_complexity(user_password)
+        hash_result = Password.hash_pwd(user_password)
         
         if complexity_result is True:
             return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
@@ -40,6 +41,7 @@ def check_pwd():
 
         else:
             return jsonify(Process='SUCESS!', Process_Message='Good Password!')
+            return jsonify(hash_result)
 
 
     except (KeyError, exceptions.BadRequest):

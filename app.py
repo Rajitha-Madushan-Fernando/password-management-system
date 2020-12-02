@@ -1,8 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+#Exception lib 
+from werkzeug import exceptions
 import os
 
+
+#Import user defined libs
+from password_module.password import Password
 
 #init app
 app = Flask(__name__)
@@ -16,10 +21,30 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
+#Password module
+@app.route('/add_pwd', methods=['POST'])
+def check_pwd():
+    try:
+        req_data = request.get_json()
+        user_password = req_data['password']
+        print(user_password)
 
+        result = Password.check_hibp(user_password)
+        print(result)
+
+        if result is True:
+            return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+        else:
+            return jsonify(Process='SUCESS!', Process_Message='Safe Password!.')
+
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
+
+
+        
 
 
 
 #Run server
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)  # The user should type the machine ID here

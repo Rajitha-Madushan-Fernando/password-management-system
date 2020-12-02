@@ -29,19 +29,21 @@ def check_pwd():
         user_password = req_data['password']
         print(user_password)
 
-        result = Password.check_hibp(user_password)
-        print(result)
+        hibp_result = Password.check_hibp(user_password)
+        complexity_result = Password.check_complexity(user_password)
 
-        if result is True:
+        if hibp_result is True:
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+
+        elif complexity_result is True:
+            return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
+            
         else:
-            return jsonify(Process='SUCESS!', Process_Message='Safe Password!.')
+            return jsonify(Process='SUCESS!', Process_Message='Good Password!.')
+
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
-
-
-        
 
 
 

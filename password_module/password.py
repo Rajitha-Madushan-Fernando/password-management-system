@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
+from json import load
+import pyhibp
+from pyhibp import pwnedpasswords as pw
 #from flask.ext.bcrypt import Bcrypt
 #from flask.ext.hashing import Hashing
 import os
-import pyhibp
-from pyhibp import pwnedpasswords as pw
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
 
 class Password:
 
@@ -44,6 +48,13 @@ class Password:
             # Get breaches that affect a given account
             resp = pyhibp.get_account_breaches(account="test@example.com", truncate_response=True)
     
+    @staticmethod
+    def check_complexity(password):
+        with open(basedir + '/password_complexity.json', 'r') as file:
+            req = load(file)
+            return True
+            
+
 
 
 

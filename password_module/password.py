@@ -51,9 +51,46 @@ class Password:
     @staticmethod
     def check_complexity(password):
         with open(basedir + '/password_complexity.json', 'r') as file:
-            req = load(file)
-            return True
+            criteria = load(file)
+            spCharater = criteria['existSpecialCharacter']
+            upperCase = criteria['existUpperCase']
+            lowerCase = criteria['existLowerCase']
+            number = criteria['existNumber']
+            spCharaterList = criteria['specialCharaterList']
+            maxLen = criteria['maxLength']
+            minLen = criteria['minLength']
+            chaType = criteria['charaterType']
             
+            #print (spCharaterList)
+            
+            if len(password) > minLen:
+                return True
+                print("Make sure your password is at least 8 letters")
+
+            elif len(password) < maxLen:
+                return True
+                print("Make sure your password is at max 16 letters")
+            
+            elif any(str.isdigit(password) for password in password) != number:
+                return True
+                print("Make sure your password contain one number")
+            
+            elif any(password.isupper() for password in password) != upperCase:
+                return True
+                print("Make sure your password contain one uppercase letter")
+
+            elif any(password.islower() for password in password) != lowerCase:
+                return True
+                print("Make sure your password contain one lowercase letter")
+            
+
+            elif any(c in spCharaterList for c in password) != True:
+                return True
+                print("Make sure your password contain one special charater")
+
+
+
+
 
 
 

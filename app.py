@@ -31,15 +31,15 @@ def check_pwd():
 
         hibp_result = Password.check_hibp(user_password)
         complexity_result = Password.check_complexity(user_password)
-
-        if hibp_result is True:
+        
+        if complexity_result is True:
+            return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
+    
+        elif hibp_result is True:
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
-        elif complexity_result is True:
-            return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
-            
         else:
-            return jsonify(Process='SUCESS!', Process_Message='Good Password!.')
+            return jsonify(Process='SUCESS!', Process_Message='Good Password!')
 
 
     except (KeyError, exceptions.BadRequest):

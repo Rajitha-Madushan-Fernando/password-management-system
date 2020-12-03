@@ -63,35 +63,31 @@ class Password:
             #print (spCharaterList)
             
             if len(password) > minLen:
-                return True
-                print("Make sure your password is at least 8 letters")
+                return False, "Make sure your password is at least 8 letters"
 
             elif len(password) < maxLen:
-                return True
-                print("Make sure your password is at max 16 letters")
+                return False, "Make sure your password is at max 16 letters"
             
             elif any(str.isdigit(password) for password in password) != number:
-                return True
-                print("Make sure your password contain one number")
+                return False, "Make sure your password contain one number"
             
             elif any(password.isupper() for password in password) != upperCase:
-                return True
-                print("Make sure your password contain one uppercase letter")
+                return False, "Make sure your password contain one uppercase letter"
 
             elif any(password.islower() for password in password) != lowerCase:
-                return True
-                print("Make sure your password contain one lowercase letter")
+                return False, "Make sure your password contain one lowercase letter"
             
 
             elif any(c in spCharaterList for c in password) != True:
-                return True
-                print("Make sure your password contain one special charater")
+                return False, "Make sure your password contain one special charater"
+
+            else:
+                return True, "Password suceess"
 
     @staticmethod
     def hash_pwd(password):
         updated_password = password.encode("utf-8")
         password_hash = bcrypt.hashpw(updated_password, bcrypt.gensalt())
-        print (password_hash)
         return password_hash
 
     @staticmethod

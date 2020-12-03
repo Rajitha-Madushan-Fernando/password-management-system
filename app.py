@@ -1,18 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+import jsonpickle
 #Exception lib 
 from werkzeug import exceptions
 import os
-
+from datetime import date
 
 #Import user defined libs
 from password_module.password import Password
-from db_models.password_model import PasswordList
+from db_models.password import PasswordList
 
 #init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 #Init ma
 ma = Marshmallow(app)
@@ -24,30 +26,29 @@ def check_pwd():
     try:
         req_data = request.get_json()
         user_password = req_data['password']
-        print(user_password)
+        user_id = req_data['user_id']
+        app_id = req_data['app_id']
+        #print(user_password)
 
         #user defined functions
         hibp_result = Password.check_hibp(user_password)
-        complexity_result = Password.check_complexity(user_password)
+        is_complexity, complexity_result_msg  = Password.check_complexity(user_password)
         hash_result = Password.hash_pwd(user_password)
         
-        print("--------------------------")
-        print (hash_result)
+        #print("--------------------------")
+        #print (hash_result)
 
-        if complexity_result is True:
-            return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
+        if is_complexity is False:
+            return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
     
         elif hibp_result is True:
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            print("xxxxxxxxxxxxxxxxxxxxxxxxx")
-            ##return jsonify(Process='SUCESS!', Process_Message='Good Password!')
+            #return jsonify(Process='SUCESS!', Process_Message='Good Password!')
             #return jsonify(hash_result)
-            PasswordList.add_app_pwd(id, hibp_result)
-            response = Response("Your password successfully added", 201, mimetype='application/json')
-            return response
-            #Save password and other data in the database!
+            response = PasswordList.add_app_pwd(hash_result,user_id,app_id)
+            return jsonify({"Message": "Succesfuly saved"}), 201
 
 
     except (KeyError, exceptions.BadRequest):
@@ -55,8 +56,11 @@ def check_pwd():
 
 @app.route('/pwd_list', methods=['GET'])
 def get_pwd():
-    '''Function to get all the movies in the database'''
-    return jsonify({'Passwords': PasswordList.get_all_password()})
+    '''Function to get all the password in the database'''
+    print("0000000")
+    response = PasswordList.get_all_password()
+    result = jsonpickle.encode(response)
+    return result
 
 #Run server
 if __name__ == '__main__':

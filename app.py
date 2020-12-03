@@ -8,15 +8,12 @@ import os
 
 #Import user defined libs
 from password_module.password import Password
+from db_models.password_model import PasswordList
 
 #init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-#Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-#Init db
-db = SQLAlchemy(app)
+
 #Init ma
 ma = Marshmallow(app)
 
@@ -29,10 +26,14 @@ def check_pwd():
         user_password = req_data['password']
         print(user_password)
 
+        #user defined functions
         hibp_result = Password.check_hibp(user_password)
         complexity_result = Password.check_complexity(user_password)
         hash_result = Password.hash_pwd(user_password)
         
+        print("--------------------------")
+        print (hash_result)
+
         if complexity_result is True:
             return jsonify(Process='ERROR!', Process_Message='This password does not meet security policies.')
     
@@ -40,14 +41,22 @@ def check_pwd():
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            return jsonify(Process='SUCESS!', Process_Message='Good Password!')
-            return jsonify(hash_result)
+            print("xxxxxxxxxxxxxxxxxxxxxxxxx")
+            ##return jsonify(Process='SUCESS!', Process_Message='Good Password!')
+            #return jsonify(hash_result)
+            PasswordList.add_app_pwd(id, hibp_result)
+            response = Response("Your password successfully added", 201, mimetype='application/json')
+            return response
+            #Save password and other data in the database!
 
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
-
+@app.route('/pwd_list', methods=['GET'])
+def get_pwd():
+    '''Function to get all the movies in the database'''
+    return jsonify({'Passwords': PasswordList.get_all_password()})
 
 #Run server
 if __name__ == '__main__':

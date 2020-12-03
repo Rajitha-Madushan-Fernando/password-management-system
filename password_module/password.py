@@ -92,6 +92,7 @@ class Password:
         updated_password = password.encode("utf-8")
         password_hash = bcrypt.hashpw(updated_password, bcrypt.gensalt())
         print (password_hash)
+        return password_hash
 
     @staticmethod
     def verify_password(password):

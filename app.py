@@ -158,8 +158,6 @@ def get_pwd():
 #Password module end
 
 
-
-
 ##Legacy Application module
 @app.route('/add_new_app', methods=['POST'])
 def add_legacy_app():

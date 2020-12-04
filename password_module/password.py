@@ -95,7 +95,7 @@ class Password:
     def verify_password(password,hash_password):
         #print (password)
         #print (hash_password)
-        passsword_status =  bcrypt.checkpw(hash_password.encode("utf-8"), password.encode("utf-8"))
+        passsword_status =  bcrypt.checkpw(hash_password.encode("utf-8"), password)
         return passsword_status
 
 

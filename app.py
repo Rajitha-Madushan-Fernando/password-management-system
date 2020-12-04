@@ -11,7 +11,6 @@ from functools import wraps
 from werkzeug import exceptions
 
 
-
 #Import user defined libs
 from password_module.password import Password
 from db_models.pms_models import PasswordList
@@ -21,7 +20,6 @@ from db_models.pms_models import UserList
 #init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 #Init ma
 ma = Marshmallow(app)
@@ -76,9 +74,10 @@ def register():
 @app.route('/all_users', methods=['GET'])
 def get_users():
     '''Function to get all the password in the database'''
-    response = UserList.get_all_users()
-    #result = jsonpickle.encode(response)
-    #return result
+    result = UserList.get_all_users()
+    #print (result)
+    result =  make_response(jsonify({"status": result}))
+    return result
 ##User registration module end
 
 
@@ -151,9 +150,9 @@ def check_pwd():
 @app.route('/pwd_list', methods=['GET'])
 def get_pwd():
     '''Function to get all the password in the database'''
-    response = PasswordList.get_all_password()
-    result = jsonpickle.encode(response)
-    return result
+    result = PasswordList.get_all_password()
+    response =  make_response(jsonify({"status": result}))
+    return response
 #Password module end
 
 
@@ -173,12 +172,12 @@ def add_legacy_app():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/app_list', methods=['GET'])
-#@token_required
+@token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
-    response = LegacyApp.get_all_legacy_app()
-    result = jsonpickle.encode(response)
-    return result
+    result = LegacyApp.get_all_legacy_app()
+    response =  make_response(jsonify({"status": result}))
+    return response
 ##Legacy Application module finished
 
 

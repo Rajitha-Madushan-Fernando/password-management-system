@@ -2,13 +2,9 @@ from database_config import *
 import json
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-import os
 from datetime import datetime
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
-
+from flask_json import FlaskJSON, JsonError, json_response, as_json
+import os
 
 
 # Initializing our database
@@ -22,13 +18,7 @@ class PasswordList(db.Model):
     user_id = db.Column(db.String(11))
     app_id = db.Column(db.String(11))
 
-    def json(self):
-        return {
-            'id': self.id,
-            'password': self.password,
-            'app_id': self.app_id,
-            'user_id': self.user_id
-        }
+   
    
     def add_app_pwd(_password,_app_id,_user_id):
 
@@ -42,6 +32,13 @@ class PasswordList(db.Model):
         #function to get all pwd in our database to related particular user
         return [PasswordList.json(passwordList) for passwordList in PasswordList.query.all()]
 
+    def json(self):
+        return {
+            'id': self.id,
+            'password': "Hide",
+            'app_id': self.app_id,
+            'user_id': self.user_id
+        }
 
 # the class legacy app will inherit the db.Model of SQLAlchemy
 class LegacyApp(db.Model):
@@ -49,13 +46,6 @@ class LegacyApp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     app_name = db.Column(db.String(128))
     
-
-
-    def json(self):
-        return {
-            'id': self.id,
-            'name': self.app_name
-        }
 
     def add_new_legacy_app(_app_name):
         # creating an instance of our password constructor
@@ -68,6 +58,11 @@ class LegacyApp(db.Model):
         #function to get all pwd in our database to related particular user
         return [LegacyApp.json(legacyApp) for legacyApp in LegacyApp.query.all()]
 
+    def json(self):
+        return {
+            'id': self.id,
+            'app_name': self.app_name
+        }
 
 # the class User app will inherit the db.Model of SQLAlchemy
 class UserList(db.Model):
@@ -80,15 +75,7 @@ class UserList(db.Model):
     
     
 
-    def json(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'password': self.password,
-            'email': self.email,
-            'role': self.role
-        }
-
+    
     def add_new_user(_username,_password,_email,_role):
         # creating an instance of our password constructor
         new_user = UserList(role=_role,username=_username,password=_password,email=_email)
@@ -98,8 +85,10 @@ class UserList(db.Model):
     
     def get_all_users():
         #function to get all pwd in our database to related particular user
-        result =  [UserList.json(userApp) for userApp in UserList.query.all()]
-        return result
+        #selected_list = ['id','username','email','role']
+        #user_list =UserList.query.with_entities(UserList.id, UserList.username).all()
+        user_list= [UserList.json(userApp) for userApp in UserList.query.all()]
+        return user_list
     
     def check_login(_email,):
         user = UserList.query.filter_by(email=_email).first()
@@ -109,4 +98,13 @@ class UserList(db.Model):
         else:
             return user
     
+    def json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'password': "Hide",
+            'email': self.email,
+            'role': self.role
+        }
+
    

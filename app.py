@@ -39,7 +39,7 @@ def token_required(f):
         except:
             return jsonify({'error': 'Need a valid token to view this page'}), 401
     return wrapper
-#Access controll module finished
+#Access controll module end
 
 
 ##User registration module
@@ -79,7 +79,16 @@ def get_users():
     response = UserList.get_all_users()
     result = jsonpickle.encode(response)
     return result
-##User registration module finished
+##User registration module end
+
+
+##User login module Start
+@app.route('/login', methods=['POST'])
+def login():
+    request_data = request.get_json()
+    username = str(request_data['username'])
+    password = str(request_data['password'])
+##User login module end
 
 
 
@@ -123,7 +132,7 @@ def get_pwd():
     response = PasswordList.get_all_password()
     result = jsonpickle.encode(response)
     return result
-#Password module finished
+#Password module end
 
 
 

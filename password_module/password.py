@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from json import load
 import pyhibp
 from pyhibp import pwnedpasswords as pw
+from werkzeug.security import check_password_hash
 import bcrypt
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))

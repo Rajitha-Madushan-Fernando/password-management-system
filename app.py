@@ -31,14 +31,14 @@ ma = Marshmallow(app)
 app.config['SECRET_KEY'] = 'rajithasecretkey'
 def token_required(f):
     @wraps(f)
-    def wrapper(*args, **kwargs):
+    def wrap(*args, **kwargs):
         token = request.args.get('token')
         try:
             jwt.decode(token, app.config['SECRET_KEY'])
             return f(*args, **kwargs)
         except:
             return jsonify({'error': 'Need a valid token to view this page'}), 401
-    return wrapper
+    return wrap
 #Access controll module end
 
 
@@ -77,8 +77,8 @@ def register():
 def get_users():
     '''Function to get all the password in the database'''
     response = UserList.get_all_users()
-    result = jsonpickle.encode(response)
-    return result
+    #result = jsonpickle.encode(response)
+    #return result
 ##User registration module end
 
 
@@ -109,8 +109,7 @@ def login():
         error_message="Your username or password is invalid"
         return jsonify({
                 'Error Meesage': error_message
-        }), 401
-        
+        }), 401     
 ##User login module end
 
 
@@ -174,7 +173,7 @@ def add_legacy_app():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/app_list', methods=['GET'])
-@token_required
+#@token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
     response = LegacyApp.get_all_legacy_app()

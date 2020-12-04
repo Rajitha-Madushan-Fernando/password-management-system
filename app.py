@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import jsonpickle
@@ -86,19 +86,31 @@ def get_users():
 @app.route('/login', methods=['POST'])
 def login():
     request_data = request.get_json()
-    email = str(request_data['email'])
-    password = str(request_data['password'])
-
-    hash_pwd = Password.hash_pwd(password)
-    match = UserList.check_login(email,hash_pwd)
-    if match:
-        if match:
+    email = request_data['email']
+    entered_password = request_data['password']
+    #Do password verification
+    
+    user = UserList.check_login(email)
+    #return jsonpickle.encode(user)
+    
+    #print(current_pwd)
+    if user:
+        current_pwd = user.password
+        if  Password.verify_password(current_pwd,entered_password):
             expiration_date = datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
             token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
-            return token
-    else:
-        return Response("", 401, mimetype='application/json')
+            #return token
+            return jsonify({
+                'token': token.decode('utf-8')
+            }), 200
+            
 
+    else:
+        error_message="Your username or password is invalid"
+        return jsonify({
+                'Error Meesage': error_message
+        }), 401
+        
 ##User login module end
 
 
@@ -119,7 +131,7 @@ def check_pwd():
         hash_result = Password.hash_pwd(user_password)
         
         #print("--------------------------")
-        #print (hash_result)
+        print (hash_result)
 
         if is_complexity is False:
             return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)

@@ -20,7 +20,7 @@ class PasswordList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(128))
     user_id = db.Column(db.String(11))
-    app_id = db.Column(db.Integer(), db.ForeignKey('tbl_legacy_application_list.id'))
+    app_id = db.Column(db.String(11))
 
     def json(self):
         return {
@@ -100,6 +100,12 @@ class UserList(db.Model):
         #function to get all pwd in our database to related particular user
         return [UserList.json(userApp) for userApp in UserList.query.all()]
     
-    def check_login(email,password):
-        return True
+    def check_login(_email,):
+        user = UserList.query.filter_by(email=_email).first()
+        if user is None:
+            print("-------")
+            return False
+        else:
+            return user
+    
    

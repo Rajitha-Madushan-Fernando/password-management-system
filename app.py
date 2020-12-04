@@ -86,8 +86,19 @@ def get_users():
 @app.route('/login', methods=['POST'])
 def login():
     request_data = request.get_json()
-    username = str(request_data['username'])
+    email = str(request_data['email'])
     password = str(request_data['password'])
+
+    hash_pwd = Password.hash_pwd(password)
+    match = UserList.check_login(email,hash_pwd)
+    if match:
+        if match:
+            expiration_date = datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
+            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
+            return token
+    else:
+        return Response("", 401, mimetype='application/json')
+
 ##User login module end
 
 
@@ -153,6 +164,7 @@ def add_legacy_app():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/app_list', methods=['GET'])
+@token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
     response = LegacyApp.get_all_legacy_app()

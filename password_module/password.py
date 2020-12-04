@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from json import load
 import pyhibp
 from pyhibp import pwnedpasswords as pw
-from werkzeug.security import check_password_hash
 import bcrypt
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -92,8 +91,11 @@ class Password:
         return password_hash
 
     @staticmethod
-    def verify_password(password):
-        return check_password_hash(password_hash, password)
+    def verify_password(password,hash_password):
+        print (password)
+        print (hash_password)
+        passsword_status =  bcrypt.checkpw((password, 'utf-8'),(hash_password,'utf-8')) 
+        return passsword_status
 
 
 

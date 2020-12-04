@@ -99,5 +99,7 @@ class UserList(db.Model):
     def get_all_users():
         #function to get all pwd in our database to related particular user
         return [UserList.json(userApp) for userApp in UserList.query.all()]
-
+    
+    def check_login(email,password):
+        return True
    

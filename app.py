@@ -2,19 +2,21 @@ from flask import Flask, request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import jsonpickle
-#Exception lib 
-from werkzeug import exceptions
 import json
 import os
 import jwt
 import datetime
 from functools import wraps
+#Exception lib 
+from werkzeug import exceptions
+
+
 
 #Import user defined libs
 from password_module.password import Password
-from db_models.password import PasswordList
-from db_models.password import LegacyApp
-from db_models.password import UserList
+from db_models.pms_models import PasswordList
+from db_models.pms_models import LegacyApp
+from db_models.pms_models import UserList
 
 #init app
 app = Flask(__name__)

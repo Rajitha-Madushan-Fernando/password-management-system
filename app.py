@@ -43,7 +43,7 @@ def token_required(f):
                 'Error Meesage': "A Valid token is missing!"
             }), 401      
         try:   
-
+            
             data = jwt.decode(token, app.config['SECRET_KEY']) 
             return f( *args,  **kwargs) 
         except:  

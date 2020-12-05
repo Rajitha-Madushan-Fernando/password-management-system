@@ -15,8 +15,8 @@ class PasswordList(db.Model):
     __tablename__ = 'tbl_app_password_list'
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(128))
-    user_id = db.Column(db.String(11))
-    app_id = db.Column(db.String(11))
+    user_id = db.Column(db.Integer())
+    app_id = db.Column(db.Integer())
 
    
    
@@ -28,16 +28,16 @@ class PasswordList(db.Model):
         db.session.commit()  # commit changes to session
         return new_pwd
 
-    def get_all_password():
+    def get_all_password(_user_id):
         #function to get all pwd in our database to related particular user
-        return [PasswordList.json(passwordList) for passwordList in PasswordList.query.all()]
+        return [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
 
     def json(self):
         return {
-            'id': self.id,
+            #'id': self.id,
             'password': "Hide",
             'app_id': self.app_id,
-            'user_id': self.user_id
+            #'user_id': self.user_id
         }
 
 # the class legacy app will inherit the db.Model of SQLAlchemy
@@ -97,7 +97,8 @@ class UserList(db.Model):
             return False
         else:
             return user
-    
+
+  
     def json(self):
         return {
             'id': self.id,

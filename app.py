@@ -6,7 +6,9 @@ import json
 import os
 import jwt
 import datetime
+import uuid
 from functools import wraps
+from flask import session as login_session
 #Exception lib 
 from werkzeug import exceptions
 
@@ -17,28 +19,38 @@ from db_models.pms_models import PasswordList
 from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
 
+
 #init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 #Init ma
 ma = Marshmallow(app)
 
 #Access controll module
 #Without having a proper JWWT authentication token cannot access to API
-app.config['SECRET_KEY'] = 'rajithasecretkey'
+app.config['SECRET_KEY'] = 'rajithasecret'
 def token_required(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        token = request.args.get('token')
-        try:
-            jwt.decode(token, app.config['SECRET_KEY'])
-            return f(*args, **kwargs)
-        except:
-            return jsonify({'error': 'Need a valid token to view this page'}), 401
-    return wrap
-#Access controll module end
+    @wraps(f)  
+    def decorator(*args, **kwargs):
+        token = None 
+        if 'x-access-tokens' in request.headers:  
+            token = request.headers['x-access-tokens'] 
+        if not token:  
+             return jsonify({
+                'Error Meesage': "A Valid token is missing!"
+            }), 401      
+        try:  
+            data = jwt.decode(token, app.config[SECRET_KEY]) 
+        except:  
+            return jsonify({
+                'Error Meesage': "Token is invalid"
+            }), 401   
 
+            return f( *args,  **kwargs)  
+    return decorator
+#Access controll module end
 
 ##User registration module
 @app.route('/signin', methods=['POST'])
@@ -95,15 +107,17 @@ def login():
     #print(current_pwd)
     if user:
         current_pwd = user.password
+        print("--------------")
         if  Password.verify_password(current_pwd,entered_password):
-            expiration_date = datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
-            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
-            #return token
+            login_session['id'] = user.id
+            #print(login_session['id'])
+            expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'])
             return jsonify({
-                'token': token.decode('utf-8')
+                'token': token.decode('utf-8'),
+                'user-id':user.id,
+                'email': user.email
             }), 200
-            
-
     else:
         error_message="Your username or password is invalid"
         return jsonify({
@@ -119,7 +133,7 @@ def check_pwd():
     try:
         req_data = request.get_json()
         user_password = req_data['password']
-        user_id = req_data['user_id']
+        user_id = login_session['id']
         app_id = req_data['app_id']
         #print(user_password)
 
@@ -150,7 +164,8 @@ def check_pwd():
 @app.route('/pwd_list', methods=['GET'])
 def get_pwd():
     '''Function to get all the password in the database'''
-    result = PasswordList.get_all_password()
+    #print(login_session['id'])
+    result = PasswordList.get_all_password(login_session['id'])
     response =  make_response(jsonify({"status": result}))
     return response
 #Password module end
@@ -172,7 +187,7 @@ def add_legacy_app():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/app_list', methods=['GET'])
-@token_required
+#@token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
     result = LegacyApp.get_all_legacy_app()

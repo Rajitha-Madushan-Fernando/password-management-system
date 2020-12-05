@@ -13,4 +13,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db
 #app.config['SQLALCHEMY_TRACK_MODIFICATION'] = True
 
 
+
 #conn = sqlite3.connect('pms-enits.db')

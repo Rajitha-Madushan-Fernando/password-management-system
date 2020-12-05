@@ -20,10 +20,10 @@ class PasswordList(db.Model):
 
    
    
-    def add_app_pwd(_password,_app_id,_user_id):
+    def add_app_pwd(_password,_user_id,_app_id,):
 
         # creating an instance of our password constructor
-        new_pwd = PasswordList(password=_password, app_id=_app_id, user_id=_user_id)
+        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
         db.session.add(new_pwd)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_pwd

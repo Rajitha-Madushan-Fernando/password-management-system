@@ -20,7 +20,7 @@ class PasswordList(db.Model):
 
    
    
-    def add_app_pwd(_password,_user_id,_app_id,):
+    def add_app_pwd(_password,_user_id,_app_id):
 
         # creating an instance of our password constructor
         new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)

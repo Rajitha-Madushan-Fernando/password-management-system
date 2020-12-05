@@ -35,7 +35,7 @@ def token_required(f):
     @wraps(f)  
     def decorator(*args, **kwargs):
         token = None 
-        print (request.headers)
+        #print (request.headers)
         if 'x-access-tokens' in request.headers:  
             token = request.headers['x-access-tokens'] 
         if not token:  

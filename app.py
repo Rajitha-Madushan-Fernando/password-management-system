@@ -9,8 +9,10 @@ import datetime
 import uuid
 from functools import wraps
 from flask import session as login_session
+
 #Exception lib 
 from werkzeug import exceptions
+
 
 
 #Import user defined libs
@@ -25,8 +27,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-#Init ma
-ma = Marshmallow(app)
+
 
 #Access controll module
 #Without having a proper JWWT authentication token cannot access to API
@@ -36,6 +37,7 @@ def token_required(f):
     def decorator(*args, **kwargs):
         token = None 
         #print (request.headers)
+        
         if 'x-access-tokens' in request.headers:  
             token = request.headers['x-access-tokens'] 
         if not token:  
@@ -48,7 +50,7 @@ def token_required(f):
             return f( *args,  **kwargs) 
         except:  
             return jsonify({
-                'Error Meesage': "Token is invalid"
+                'Error Meesage': "Missing information, wrong keys or invalid Token"
             }), 401   
             
              
@@ -115,7 +117,7 @@ def login():
             login_session['id'] = user.id
             #print(login_session['id'])
             expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'])
+            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
             return jsonify({
                 'token': token.decode('utf-8'),
                 'user-id':user.id,

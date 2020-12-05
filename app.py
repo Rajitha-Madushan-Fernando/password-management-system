@@ -35,6 +35,7 @@ def token_required(f):
     @wraps(f)  
     def decorator(*args, **kwargs):
         token = None 
+        print (request.headers)
         if 'x-access-tokens' in request.headers:  
             token = request.headers['x-access-tokens'] 
         if not token:  
@@ -107,7 +108,6 @@ def login():
     #print(current_pwd)
     if user:
         current_pwd = user.password
-        print("--------------")
         if  Password.verify_password(current_pwd,entered_password):
             login_session['id'] = user.id
             #print(login_session['id'])
@@ -143,7 +143,7 @@ def check_pwd():
         hash_result = Password.hash_pwd(user_password)
         
         #print("--------------------------")
-        print (hash_result)
+        #print (hash_result)
 
         if is_complexity is False:
             return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
@@ -187,7 +187,7 @@ def add_legacy_app():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/app_list', methods=['GET'])
-#@token_required
+@token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
     result = LegacyApp.get_all_legacy_app()

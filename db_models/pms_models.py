@@ -5,47 +5,25 @@ from flask_marshmallow import Marshmallow
 from datetime import datetime
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 import os
-
+from flask_restless import APIManager
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
 
 # Initializing our database
 db = SQLAlchemy(app)
 
-# the class Password will inherit the db.Model of SQLAlchemy
-class PasswordList(db.Model):
-    __tablename__ = 'tbl_app_password_list'
-    id = db.Column(db.Integer, primary_key=True)
-    password = db.Column(db.String(128))
-    user_id = db.Column(db.Integer())
-    app_id = db.Column(db.Integer())
-
-   
-   
-    def add_app_pwd(_password,_user_id,_app_id):
-
-        # creating an instance of our password constructor
-        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
-        db.session.add(new_pwd)  # add new password to database session
-        db.session.commit()  # commit changes to session
-        return new_pwd
-
-    def get_all_password(_user_id):
-        #function to get all pwd in our database to related particular user
-        return [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
-
-    def json(self):
-        return {
-            #'id': self.id,
-            'password': "Hide",
-            'app_id': self.app_id,
-            #'user_id': self.user_id
-        }
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 # the class legacy app will inherit the db.Model of SQLAlchemy
 class LegacyApp(db.Model):
     __tablename__ = 'tbl_legacy_application_list'
     id = db.Column(db.Integer, primary_key=True)
     app_name = db.Column(db.String(128))
-    
+    passwordlist = db.relationship('PasswordList', backref='passwordlist', lazy='dynamic')
 
     def add_new_legacy_app(_app_name):
         # creating an instance of our password constructor
@@ -64,7 +42,6 @@ class LegacyApp(db.Model):
             'app_name': self.app_name
         }
 
-# the class User app will inherit the db.Model of SQLAlchemy
 class UserList(db.Model):
     __tablename__ = 'tbl_users'
     id = db.Column(db.Integer, primary_key=True)
@@ -93,7 +70,6 @@ class UserList(db.Model):
     def check_login(_email,):
         user = UserList.query.filter_by(email=_email).first()
         if user is None:
-            print("-------")
             return False
         else:
             return user
@@ -108,4 +84,41 @@ class UserList(db.Model):
             'role': self.role
         }
 
+
+
+# the class Password will inherit the db.Model of SQLAlchemy
+class PasswordList(db.Model):
+    __tablename__ = 'tbl_app_password_list'
+    id = db.Column(db.Integer, primary_key=True)
+    password = db.Column(db.String(128))
+    user_id = db.Column(db.Integer())
+    app_id = db.Column(db.Integer,db.ForeignKey('tbl_legacy_application_list.id'))
    
+    def add_app_pwd(_password,_user_id,_app_id):
+
+        # creating an instance of our password constructor
+        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
+        db.session.add(new_pwd)  # add new password to database session
+        db.session.commit()  # commit changes to session
+        return new_pwd
+
+    def get_all_password(_user_id):
+        #function to get all pwd in our database to related particular user
+        result =  [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
+        #print (result)
+        return result
+
+
+    def json(self):
+        return {
+            #'id': self.id,
+            'password': "Hide",
+            'app_id': self.app_id,
+            #'user_id': self.user_id
+        }
+
+
+# the class User app will inherit the db.Model of SQLAlchemy
+
+db.create_all()
+manager = APIManager(app, flask_sqlalchemy_db=db)

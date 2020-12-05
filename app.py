@@ -42,14 +42,16 @@ def token_required(f):
              return jsonify({
                 'Error Meesage': "A Valid token is missing!"
             }), 401      
-        try:  
-            data = jwt.decode(token, app.config[SECRET_KEY]) 
+        try:   
+
+            data = jwt.decode(token, app.config['SECRET_KEY']) 
+            return f( *args,  **kwargs) 
         except:  
             return jsonify({
                 'Error Meesage': "Token is invalid"
             }), 401   
-
-            return f( *args,  **kwargs)  
+            
+             
     return decorator
 #Access controll module end
 
@@ -85,6 +87,7 @@ def register():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')    
     
 @app.route('/all_users', methods=['GET'])
+@token_required
 def get_users():
     '''Function to get all the password in the database'''
     result = UserList.get_all_users()
@@ -129,6 +132,7 @@ def login():
 
 #Password module start
 @app.route('/add_pwd', methods=['POST'])
+@token_required
 def check_pwd():
     try:
         req_data = request.get_json()
@@ -162,6 +166,7 @@ def check_pwd():
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
 
 @app.route('/pwd_list', methods=['GET'])
+@token_required
 def get_pwd():
     '''Function to get all the password in the database'''
     #print(login_session['id'])
@@ -173,6 +178,7 @@ def get_pwd():
 
 ##Legacy Application module
 @app.route('/add_new_app', methods=['POST'])
+@token_required
 def add_legacy_app():
     try:
         req_data = request.get_json()

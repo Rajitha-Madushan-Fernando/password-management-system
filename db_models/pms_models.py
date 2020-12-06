@@ -89,9 +89,9 @@ class PasswordList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     password = db.Column(db.String(128))
     user_id = db.Column(db.Integer())
-    app_id = db.Column(db.Integer, db.ForeignKey('tbl_legacy_application_list.id'))
+    app_id = db.Column(db.Integer())
     # define relationship
-    tbl_legacy_application_list = db.relationship('LegacyApp')
+    #tbl_legacy_application_list = db.relationship('LegacyApp')
     #legacyapp = db.relationship('LegacyApp', backref="passwords", uselist=False)
 
     def add_app_pwd(_password,_user_id,_app_id):

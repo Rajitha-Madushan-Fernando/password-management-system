@@ -41,6 +41,43 @@ class LegacyApp(db.Model):
             'app_name': self.app_name
         }
 
+# the class Password will inherit the db.Model of SQLAlchemy
+class PasswordList(db.Model):
+    __tablename__ = 'tbl_app_password_list'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    password = db.Column(db.String(128))
+    user_id = db.Column(db.Integer())
+    app_id = db.Column(db.Integer, db.ForeignKey('tbl_legacy_application_list.id'))
+    app = db.relationship('LegacyApp', backref=db.backref('passwordlist'))
+
+    db.create_all()
+    
+    
+    def add_app_pwd(_password,_user_id,_app_id):
+
+        # creating an instance of our password constructor
+        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
+        db.session.add(new_pwd)  # add new password to database session
+        db.session.commit()  # commit changes to session
+        return new_pwd
+
+    def get_all_password(_user_id):
+        #function to get all pwd in our database to related particular user
+        result = [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
+        #print (result)
+        return result
+
+  
+    def json(self):
+        return {
+            #'id': self.id,
+            'password': "Hide",
+            'app_name': self.app_id,
+            #'user_id': self.user_id
+        }
+
+
+
 class UserList(db.Model):
     __tablename__ = 'tbl_users'
     id = db.Column(db.Integer, primary_key=True)
@@ -83,40 +120,6 @@ class UserList(db.Model):
             'role': self.role
         }
 
-# the class Password will inherit the db.Model of SQLAlchemy
-class PasswordList(db.Model):
-    __tablename__ = 'tbl_app_password_list'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
-    password = db.Column(db.String(128))
-    user_id = db.Column(db.Integer())
-    app_id = db.Column(db.Integer())
-    # define relationship
-    #tbl_legacy_application_list = db.relationship('LegacyApp')
-    #legacyapp = db.relationship('LegacyApp', backref="passwords", uselist=False)
-
-    def add_app_pwd(_password,_user_id,_app_id):
-
-        # creating an instance of our password constructor
-        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
-        db.session.add(new_pwd)  # add new password to database session
-        db.session.commit()  # commit changes to session
-        return new_pwd
-
-    def get_all_password(_user_id):
-        #function to get all pwd in our database to related particular user
-        result = [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
-        #result =  [PasswordList.json(passwordlist) for passwordlist in PasswordList.query.all()]
-        #print (result)
-        return result
-
-  
-    def json(self):
-        return {
-            #'id': self.id,
-            'password': "Hide",
-            'app_name': self.app_id,
-            #'user_id': self.user_id
-        }
 
 
 # the class User app will inherit the db.Model of SQLAlchemy

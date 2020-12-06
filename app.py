@@ -1,3 +1,4 @@
+from database_config import *
 from flask import Flask, request, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -20,12 +21,6 @@ from password_module.password import Password
 from db_models.pms_models import PasswordList
 from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
-
-
-#init app
-app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 
 

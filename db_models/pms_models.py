@@ -13,15 +13,17 @@ from sqlalchemy import event
 
 # Initializing our database
 db = SQLAlchemy(app)
-#Init ma
 ma = Marshmallow(app)
-
 
 # the class legacy app will inherit the db.Model of SQLAlchemy
 class LegacyApp(db.Model):
     __tablename__ = 'tbl_legacy_application_list'
-    id = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True, unique=True)
+    id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     app_name = db.Column(db.String(128), nullable=False )
+    legacyapp = db.relationship(
+        "PasswordList", backref="LegacyApp", lazy="select", uselist=False
+    )
+
     
 
     def add_new_legacy_app(_app_name):
@@ -48,7 +50,7 @@ class PasswordList(db.Model):
     password = db.Column(db.String(128))
     user_id = db.Column(db.Integer())
     app_id = db.Column(db.Integer, db.ForeignKey('tbl_legacy_application_list.id'))
-    app = db.relationship('LegacyApp', backref=db.backref('passwordlist'))
+    
 
     db.create_all()
     

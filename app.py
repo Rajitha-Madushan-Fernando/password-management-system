@@ -87,8 +87,9 @@ def register():
 @token_required
 def get_users():
     '''Function to get all the password in the database'''
+    print("----------------------")
     result = UserList.get_all_users()
-    #print (result)
+    print (result)
     result =  make_response(jsonify({"status": result}))
     return result
 ##User registration module end
@@ -193,6 +194,7 @@ def add_legacy_app():
 @token_required
 def get_legacy_app():
     '''Function to get all the app list in the database'''
+    print("----------!!!-----------")
     result = LegacyApp.get_all_legacy_app()
     response =  make_response(jsonify({"status": result}))
     return response

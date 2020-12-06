@@ -16,6 +16,7 @@ pyjwt = "*"
 jsonpickle = "*"
 flask-json = "*"
 flask-restless = "*"
+requests = "*"
 
 [dev-packages]
 

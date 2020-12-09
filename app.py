@@ -186,17 +186,23 @@ def get_pwd():
 
 
 ##Legacy Application module
-@app.route('/add_new_app', methods=['POST'])
+@app.route('/add_new_legacy_app', methods=['POST'])
 @token_required
 def add_legacy_app():
     try:
         req_data = request.get_json()
         app_name = req_data['app_name']
         #print(user_password)
-
-        response = LegacyApp.add_new_legacy_app(app_name)
-        return jsonify({"Message": "Succesfuly saved"}), 201
-
+        roleStatus = UserList.get_user_by_id(login_session['id'])
+        #print (roleStatus)
+        #Function to get all the password in the database
+        if roleStatus:
+            result = LegacyApp.add_new_legacy_app(app_name)
+            #print (result)
+            result =  make_response(jsonify({"status": result}))
+            return result
+        else:
+            return jsonify({"Message": "Only Admin can create new applications"}), 401
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')

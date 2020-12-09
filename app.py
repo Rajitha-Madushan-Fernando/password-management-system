@@ -6,18 +6,17 @@ import jsonpickle
 import json
 import os
 import jwt
-import datetime
+import datetime 
 import uuid
 from functools import wraps
 from flask import session as login_session
-
 #Exception lib 
 from werkzeug import exceptions
 
 
-
 #Import user defined libs
 from password_module.password import Password
+from password_module.pwd_complex_edit import PasswordComplexityEdit
 from db_models.pms_models import PasswordList
 from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
@@ -62,6 +61,7 @@ def register():
         password = str(request_data['password'])
         email = request_data['email']
         role = request_data['role']
+        pwdcriteastatus = 1
         
         hibp_result = Password.check_hibp(password)
         is_complexity, complexity_result_msg  = Password.check_complexity(password)
@@ -76,9 +76,8 @@ def register():
         else:
             #return jsonify(Process='SUCESS!', Process_Message='Good Password!')
             #return jsonify(hash_result)
-            response = UserList.add_new_user(username,hash_result,email,role)
+            response = UserList.add_new_user(username,hash_result,email,role,pwdcriteastatus)
             return jsonify({"Message": "Succesfuly saved"}), 201
-
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')    
@@ -86,12 +85,18 @@ def register():
 @app.route('/all_users', methods=['GET'])
 @token_required
 def get_users():
-    '''Function to get all the password in the database'''
-    print("----------------------")
-    result = UserList.get_all_users()
-    print (result)
-    result =  make_response(jsonify({"status": result}))
-    return result
+    #Check this user role is ADMIN or USER 
+    roleStatus = UserList.get_user_by_id(login_session['id'])
+    #print (roleStatus)
+    #Function to get all the password in the database
+    if roleStatus:
+        result = UserList.get_all_users()
+        print (result)
+        result =  make_response(jsonify({"status": result}))
+        return result
+    else:
+        return jsonify({"Message": "Only Admin can see all users"}), 401
+
 ##User registration module end
 
 
@@ -107,23 +112,32 @@ def login():
     #return jsonpickle.encode(user)
     
     #print(current_pwd)
-    if user:
-        current_pwd = user.password
-        if  Password.verify_password(current_pwd,entered_password):
-            login_session['id'] = user.id
-            #print(login_session['id'])
-            expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-            token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
+    try:
+        if user:
+            current_pwd = user.password
+            if  Password.verify_password(current_pwd,entered_password):
+                login_session['id'] = user.id
+                #print(login_session['id'])
+                expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
+                return jsonify({
+                    'token': token.decode('utf-8'),
+                    'user-id':user.id,
+                    'email': user.email
+                }), 200
+            else:
+                error_message="Your username or password is invalid"
+                return jsonify({
+                        'Error Meesage': error_message
+                }), 401 
+
+        else:
+            error_message="Your username or password is invalid"
             return jsonify({
-                'token': token.decode('utf-8'),
-                'user-id':user.id,
-                'email': user.email
-            }), 200
-    else:
-        error_message="Your username or password is invalid"
-        return jsonify({
-                'Error Meesage': error_message
-        }), 401     
+                    'Error Meesage': error_message
+            }), 401  
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')      
 ##User login module end
 
 
@@ -136,16 +150,14 @@ def check_pwd():
         req_data = request.get_json()
         user_password = req_data['password']
         user_id = login_session['id']
-        app_id = req_data['app_id']
-        #print(user_password)
+        app_id = req_data['app_id'],
+        created_date = datetime.datetime.utcnow()
 
         #user defined functions
         hibp_result = Password.check_hibp(user_password)
         is_complexity, complexity_result_msg  = Password.check_complexity(user_password)
         hash_result = Password.hash_pwd(user_password)
-        
-        #print("--------------------------")
-        #print (hash_result)
+
 
         if is_complexity is False:
             return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
@@ -154,9 +166,8 @@ def check_pwd():
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            #return jsonify(Process='SUCESS!', Process_Message='Good Password!')
-            #return jsonify(hash_result)
-            response = PasswordList.add_app_pwd(hash_result,user_id,app_id)
+            print (created_date)
+            response = PasswordList.add_app_pwd(hash_result,user_id,app_id,created_date)
             return jsonify({"Message": "Succesfuly saved"}), 201
 
 
@@ -199,6 +210,39 @@ def get_legacy_app():
     response =  make_response(jsonify({"status": result}))
     return response
 ##Legacy Application module finished
+
+
+#Password complexity renew process 
+@app.route('/get_pwd_criteria', methods=['POST','GET'])
+def get_complexity():
+    response = PasswordComplexityEdit.getComplexity()
+    return response
+
+@app.route('/update_pwd_criteria', methods=['POST'])
+def update_complexity():
+    request_data = request.get_json()
+    charaterType = request_data['charaterType']
+    existLowerCase = request_data['existLowerCase']    
+    existNumber = request_data['existNumber']
+    existSpecialCharacter = request_data['existSpecialCharacter']  
+    existUpperCase = request_data['existUpperCase']
+    maxLength = request_data['maxLength']  
+    minLength = request_data['minLength']
+    specialCharaterList = request_data['specialCharaterList']  
+    lastUpdatedDate = request_data['lastUpdatedDate']
+    data = {
+        "charaterType": charaterType, 
+        "existLowerCase": existLowerCase,
+        "existNumber": existNumber, 
+        "existSpecialCharacter": existSpecialCharacter,
+        "existUpperCase": existUpperCase, 
+        "maxLength": maxLength,
+        "minLength": minLength, 
+        "specialCharaterList": specialCharaterList,
+        "lastUpdatedDate": lastUpdatedDate
+    }
+    result = PasswordComplexityEdit.updateComplexity(data)
+    return result
 
 
 #Run server

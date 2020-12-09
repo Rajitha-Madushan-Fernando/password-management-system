@@ -11,9 +11,7 @@ from sqlalchemy import event
 
 
 
-# Initializing our database
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
+
 
 # the class legacy app will inherit the db.Model of SQLAlchemy
 class LegacyApp(db.Model):
@@ -49,16 +47,16 @@ class PasswordList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     password = db.Column(db.String(128))
     user_id = db.Column(db.Integer())
+    created_date = db.Column(db.DateTime(), default=datetime.utcnow)
     app_id = db.Column(db.Integer, db.ForeignKey('tbl_legacy_application_list.id'))
-    
 
-    db.create_all()
+    #db.create_all()
     
     
-    def add_app_pwd(_password,_user_id,_app_id):
-
+    def add_app_pwd(_password,_user_id,_app_id,_created_date):
+        print(_created_date)
         # creating an instance of our password constructor
-        new_pwd = PasswordList(password=_password,user_id=_user_id,app_id=_app_id)
+        new_pwd = PasswordList(password=_password, user_id=_user_id, app_id=_app_id, created_date=_created_date)
         db.session.add(new_pwd)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_pwd
@@ -75,11 +73,11 @@ class PasswordList(db.Model):
             #'id': self.id,
             'password': "Hide",
             'app_name': self.app_id,
+            'created_date': self.created_date
             #'user_id': self.user_id
         }
 
-
-
+#the class UserList will inherit the db.Model of SQLAlchemy
 class UserList(db.Model):
     __tablename__ = 'tbl_users'
     id = db.Column(db.Integer, primary_key=True)
@@ -87,25 +85,30 @@ class UserList(db.Model):
     password = db.Column(db.String(128))
     email = db.Column(db.String(128))
     role = db.Column(db.String(20))
+    passwordCriteraStatus = db.Column(db.Integer())
     
     
 
     
-    def add_new_user(_username,_password,_email,_role):
+    def add_new_user(_username,_password,_email,_role,_passwordCriteraStatus):
         # creating an instance of our password constructor
-        new_user = UserList(role=_role,username=_username,password=_password,email=_email)
+        new_user = UserList(role=_role,username=_username,password=_password,email=_email,passwordCriteraStatus=_passwordCriteraStatus)
         db.session.add(new_user)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_user
     
     def get_all_users():
-        #function to get all pwd in our database to related particular user
-        #selected_list = ['id','username','email','role']
-        #user_list =UserList.query.with_entities(UserList.id, UserList.username).all()
         user_list= [UserList.json(userApp) for userApp in UserList.query.all()]
         return user_list
     
-    def check_login(_email,):
+    def get_user_by_id(_id):
+        userIsExist = UserList.query.filter_by(id=_id, role="ADMIN").first()
+        if userIsExist is None:
+            return False
+        else:
+            return True
+
+    def check_login(_email):
         user = UserList.query.filter_by(email=_email).first()
         if user is None:
             return False

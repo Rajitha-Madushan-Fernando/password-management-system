@@ -81,7 +81,9 @@ def register():
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')    
-    
+##User registration module end
+
+##User list retrive module start
 @app.route('/all_users', methods=['GET'])
 @token_required
 def get_users():
@@ -96,8 +98,8 @@ def get_users():
         return result
     else:
         return jsonify({"Message": "Only Admin can see all users"}), 401
+##User list retrive module end
 
-##User registration module end
 
 
 ##User login module Start
@@ -210,8 +212,7 @@ def add_legacy_app():
 @app.route('/app_list', methods=['GET'])
 @token_required
 def get_legacy_app():
-    '''Function to get all the app list in the database'''
-    print("----------!!!-----------")
+    #Function to get all the app list in the database
     result = LegacyApp.get_all_legacy_app()
     response =  make_response(jsonify({"status": result}))
     return response

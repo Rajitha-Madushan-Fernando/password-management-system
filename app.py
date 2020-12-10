@@ -10,6 +10,7 @@ import datetime
 import uuid
 from functools import wraps
 from flask import session as login_session
+from json import JSONEncoder
 #Exception lib 
 from werkzeug import exceptions
 
@@ -235,8 +236,9 @@ def update_complexity():
     existUpperCase = request_data['existUpperCase']
     maxLength = request_data['maxLength']  
     minLength = request_data['minLength']
-    specialCharaterList = request_data['specialCharaterList']  
-    lastUpdatedDate = request_data['lastUpdatedDate']
+    specialCharaterList = request_data['specialCharaterList'] 
+
+        
     data = {
         "charaterType": charaterType, 
         "existLowerCase": existLowerCase,
@@ -245,11 +247,17 @@ def update_complexity():
         "existUpperCase": existUpperCase, 
         "maxLength": maxLength,
         "minLength": minLength, 
-        "specialCharaterList": specialCharaterList,
-        "lastUpdatedDate": lastUpdatedDate
+        "specialCharaterList": specialCharaterList
     }
     result = PasswordComplexityEdit.updateComplexity(data)
-    return result
+    if result is True:
+        response = UserList.update_user_satus()
+        #return response
+        if response is True:
+            return jsonify({"Message": "Password complexity succesfully updated!"}), 200
+            
+    else:
+        return jsonify({"Message": "Missing information, wrong keys or invalid JSON."}), 401
 
 
 #Run server

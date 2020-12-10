@@ -63,10 +63,10 @@ class Password:
             #print (spCharaterList)
             
             if len(password) < minLen:
-                return False, "Make sure your password is at least 8 letters"
+                return False, "Make sure your password is at least " + str(minLen) + " letters"
 
             elif len(password) > maxLen:
-                return False, "Make sure your password is at max 16 letters"
+                return False, "Make sure your password is at max " + str(maxLen) + " letters"
             
             elif any(str.isdigit(password) for password in password) != number:
                 return False, "Make sure your password contain one number"

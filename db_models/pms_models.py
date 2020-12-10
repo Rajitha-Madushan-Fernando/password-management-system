@@ -115,7 +115,11 @@ class UserList(db.Model):
         else:
             return user
 
-  
+    def update_user_satus():
+        update = db.session.query(UserList).filter(UserList.passwordCriteraStatus == 1).update({UserList.passwordCriteraStatus:0}, synchronize_session = False)
+        db.session.commit()  # commit changes to session
+        return True
+        
     def json(self):
         return {
             'id': self.id,

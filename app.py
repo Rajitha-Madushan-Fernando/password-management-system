@@ -118,6 +118,13 @@ def login():
     try:
         if user:
             current_pwd = user.password
+            user_password_status = user.passwordCriteraStatus
+            if user_password_status is 0:
+                Message = "System adminstartor recently change the password policy. Please update the password!"
+            else:
+                Message = "Your password meet complexity"
+
+
             if  Password.verify_password(current_pwd,entered_password):
                 login_session['id'] = user.id
                 #print(login_session['id'])
@@ -126,7 +133,9 @@ def login():
                 return jsonify({
                     'token': token.decode('utf-8'),
                     'user-id':user.id,
-                    'email': user.email
+                    'email': user.email,
+                    'Message': Message
+
                 }), 200
             else:
                 error_message="Your username or password is invalid"

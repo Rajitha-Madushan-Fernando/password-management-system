@@ -47,18 +47,21 @@ class PasswordList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     password = db.Column(db.String(128))
     user_id = db.Column(db.Integer())
-    created_date = db.Column(db.DateTime(), default=datetime.utcnow)
-    app_id = db.Column(db.Integer, db.ForeignKey('tbl_legacy_application_list.id'))
+    #created_date = db.Column(db.DateTime(), default=datetime.utcnow)
+    app_id = db.Column(db.Integer(), db.ForeignKey('tbl_legacy_application_list.id'))
 
     #db.create_all()
     
     
-    def add_app_pwd(_password,_user_id,_app_id,_created_date):
-        print(_created_date)
+    def add_app_pwd(_password,_user_id,_app_id):
+        #print(_created_date)
         # creating an instance of our password constructor
-        new_pwd = PasswordList(password=_password, user_id=_user_id, app_id=_app_id, created_date=_created_date)
+        new_pwd = PasswordList(password=_password, user_id=_user_id, app_id=_app_id)
+        print("--------")
         db.session.add(new_pwd)  # add new password to database session
+        print("--------")
         db.session.commit()  # commit changes to session
+        print("--------")
         return new_pwd
 
     def get_all_password(_user_id):
@@ -71,9 +74,9 @@ class PasswordList(db.Model):
     def json(self):
         return {
             #'id': self.id,
-            'password': "Hide",
+            'password': "*************",
             'app_name': self.app_id,
-            'created_date': self.created_date
+            #'created_date': self.created_date
             #'user_id': self.user_id
         }
 

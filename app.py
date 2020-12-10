@@ -119,10 +119,10 @@ def login():
         if user:
             current_pwd = user.password
             user_password_status = user.passwordCriteraStatus
-            if user_password_status is 0:
+            if user_password_status == 0:
                 Message = "System adminstartor recently change the password policy. Please update the password!"
             else:
-                Message = "Your password meet complexity"
+                Message = "Your password meet complexity."
 
 
             if  Password.verify_password(current_pwd,entered_password):
@@ -162,8 +162,8 @@ def check_pwd():
         req_data = request.get_json()
         user_password = req_data['password']
         user_id = login_session['id']
-        app_id = req_data['app_id'],
-        created_date = datetime.datetime.utcnow()
+        app_id = req_data['app_id']
+        #created_date = datetime.datetime.utcnow()
 
         #user defined functions
         hibp_result = Password.check_hibp(user_password)
@@ -178,8 +178,11 @@ def check_pwd():
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            print (created_date)
-            response = PasswordList.add_app_pwd(hash_result,user_id,app_id,created_date)
+            #print (created_date)
+            #print(hash_result)
+            #print(user_id)
+            #print(app_id)
+            response = PasswordList.add_app_pwd(hash_result,user_id,app_id)
             return jsonify({"Message": "Succesfuly saved"}), 201
 
 

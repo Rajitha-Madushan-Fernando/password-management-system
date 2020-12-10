@@ -18,17 +18,19 @@ class LegacyApp(db.Model):
     __tablename__ = 'tbl_legacy_application_list'
     id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     app_name = db.Column(db.String(128), nullable=False )
-    legacyapp = db.relationship(
-        "PasswordList", backref="LegacyApp", lazy="select", uselist=False
-    )
+    pwd = db.relationship('PasswordList', backref='legacyapp', lazy='dynamic')
 
     
 
     def add_new_legacy_app(_app_name):
         # creating an instance of our password constructor
+        print("--------")
         new_legacy_app = LegacyApp(app_name=_app_name)
+        print("--------")
         db.session.add(new_legacy_app)  # add new password to database session
+        print("--------")
         db.session.commit()  # commit changes to session
+        print("--------")
         return new_legacy_app
 
     def get_all_legacy_app():

@@ -213,9 +213,7 @@ def add_legacy_app():
         #Function to get all the password in the database
         if roleStatus:
             result = LegacyApp.add_new_legacy_app(app_name)
-            #print (result)
-            result =  make_response(jsonify({"status": result}))
-            return result
+            return jsonify({"Message": "Succesfuly saved"}), 201
         else:
             return jsonify({"Message": "Only Admin can create new applications"}), 401
 

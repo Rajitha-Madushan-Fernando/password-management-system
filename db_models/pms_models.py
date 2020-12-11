@@ -7,8 +7,8 @@ from flask_json import FlaskJSON, JsonError, json_response, as_json
 import os
 from flask_restless import APIManager
 from sqlalchemy.engine import Engine
-from sqlalchemy import event
-
+from sqlalchemy import Table, Column, Integer, ForeignKey, select, String, event
+from sqlalchemy.orm import relationship
 
 
 
@@ -18,7 +18,7 @@ class LegacyApp(db.Model):
     __tablename__ = 'tbl_legacy_application_list'
     id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     app_name = db.Column(db.String(128), nullable=False )
-    pwd = db.relationship('PasswordList', backref='legacyapp', lazy='dynamic')
+    pwd = db.relationship('PasswordList', back_populates="parent" , lazy='joined')
 
     
 
@@ -51,6 +51,7 @@ class PasswordList(db.Model):
     user_id = db.Column(db.Integer())
     #created_date = db.Column(db.DateTime(), default=datetime.utcnow)
     app_id = db.Column(db.Integer(), db.ForeignKey('tbl_legacy_application_list.id'))
+    parent = db.relationship("LegacyApp", back_populates="pwd")
 
     #db.create_all()
     
@@ -69,7 +70,7 @@ class PasswordList(db.Model):
     def get_all_password(_user_id):
         #function to get all pwd in our database to related particular user
         result = [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
-        #print (result)
+        print (result)
         return result
 
   
@@ -77,7 +78,7 @@ class PasswordList(db.Model):
         return {
             #'id': self.id,
             'password': "*************",
-            'app_name': self.app_id,
+            'app_name': self.parent.app_name
             #'created_date': self.created_date
             #'user_id': self.user_id
         }
@@ -129,7 +130,7 @@ class UserList(db.Model):
         return {
             'id': self.id,
             'username': self.username,
-            'password': "Hide",
+            'password': "************",
             'email': self.email,
             'role': self.role
         }

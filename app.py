@@ -23,10 +23,9 @@ from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
 
 
-
 #Access controll module
 #Without having a proper JWWT authentication token cannot access to API
-app.config['SECRET_KEY'] = 'rajithasecret'
+app.config['SECRET_KEY'] = 'rajithasecretkey'
 def token_required(f):
     @wraps(f)  
     def decorator(*args, **kwargs):
@@ -268,6 +267,16 @@ def update_complexity():
             
     else:
         return jsonify({"Message": "Missing information, wrong keys or invalid JSON."}), 401
+
+
+#Check sample db relationship
+#Password complexity renew process 
+@app.route('/check_db', methods=['GET'])
+def check():
+    response = Child.get_all_child()
+    result =  make_response(jsonify({"status": response}))
+    return result
+
 
 
 #Run server

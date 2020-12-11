@@ -14,14 +14,16 @@ import os
 class LegacyApp(db.Model):
     __tablename__ = 'tbl_legacy_application_list'
     id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
+    url = db.Column(db.String(128), nullable=False )
+    description = db.Column(db.String(128), nullable=False )
     app_name = db.Column(db.String(128), nullable=False )
     pwd = db.relationship('PasswordList', back_populates="parent" , lazy='joined')
 
     
 
-    def add_new_legacy_app(_app_name):
+    def add_new_legacy_app(_app_name,_url,_description):
         # creating an instance of our password constructor
-        new_legacy_app = LegacyApp(app_name=_app_name)
+        new_legacy_app = LegacyApp(app_name=_app_name,description=_description,url=_url)
         db.session.add(new_legacy_app)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_legacy_app
@@ -62,7 +64,9 @@ class PasswordList(db.Model):
         return {
             'id': self.id,
             'password': "*************",
-            'app_name': self.parent.app_name
+            'app_name': self.parent.app_name,
+            'url': self.parent.url,
+            'description': self.parent.description
             #'created_date': self.created_date
             #'user_id': self.user_id
         }

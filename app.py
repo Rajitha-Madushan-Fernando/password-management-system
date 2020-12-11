@@ -191,9 +191,11 @@ def add_legacy_app():
     try:
         req_data = request.get_json()
         app_name = req_data['app_name']
+        url = req_data['url']
+        description = req_data['description']
         roleStatus = UserList.get_user_by_id(login_session['id'])
         if roleStatus:
-            result = LegacyApp.add_new_legacy_app(app_name)
+            result = LegacyApp.add_new_legacy_app(app_name,url,description)
             return jsonify({"Message": "Succesfuly saved"}), 201
         else:
             return jsonify({"Message": "Only Admin can create new applications"}), 401

@@ -17,7 +17,6 @@ class PasswordComplexityEdit:
     def updateComplexity(data):
         with open(basedir + '/password_complexity.json', 'w') as file:
             json_object = data
-            #a_file = open(basedir + "/password_complexity.json", "w")
             dump(json_object, file)
             file.close()  
             return True

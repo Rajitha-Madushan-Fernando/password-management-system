@@ -2,7 +2,6 @@ from database_config import *
 from flask import Flask, request, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-import jsonpickle
 import json
 import os
 import jwt

@@ -10,7 +10,6 @@ import datetime
 import uuid
 from functools import wraps
 from flask import session as login_session
-from json import JSONEncoder
 #Exception lib 
 from werkzeug import exceptions
 
@@ -30,8 +29,6 @@ def token_required(f):
     @wraps(f)  
     def decorator(*args, **kwargs):
         token = None 
-        #print (request.headers)
-        
         if 'x-access-tokens' in request.headers:  
             token = request.headers['x-access-tokens'] 
         if not token:  
@@ -89,7 +86,6 @@ def register():
 def get_users():
     #Check this user role is ADMIN or USER 
     roleStatus = UserList.get_user_by_id(login_session['id'])
-    #print (roleStatus)
     #Function to get all the password in the database
     if roleStatus:
         result = UserList.get_all_users()
@@ -111,9 +107,6 @@ def login():
     #Do password verification
     
     user = UserList.check_login(email)
-    #return jsonpickle.encode(user)
-    
-    #print(current_pwd)
     try:
         if user:
             current_pwd = user.password
@@ -126,7 +119,6 @@ def login():
 
             if  Password.verify_password(current_pwd,entered_password):
                 login_session['id'] = user.id
-                #print(login_session['id'])
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                 token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')
                 return jsonify({
@@ -162,7 +154,6 @@ def check_pwd():
         user_password = req_data['password']
         user_id = login_session['id']
         app_id = req_data['app_id']
-        #created_date = datetime.datetime.utcnow()
 
         #user defined functions
         hibp_result = Password.check_hibp(user_password)
@@ -177,10 +168,6 @@ def check_pwd():
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            #print (created_date)
-            #print(hash_result)
-            #print(user_id)
-            #print(app_id)
             response = PasswordList.add_app_pwd(hash_result,user_id,app_id)
             return jsonify({"Message": "Succesfuly saved"}), 201
 
@@ -192,7 +179,6 @@ def check_pwd():
 @token_required
 def get_pwd():
     '''Function to get all the password in the database'''
-    #print(login_session['id'])
     result = PasswordList.get_all_password(login_session['id'])
     response =  make_response(jsonify({"status": result}))
     return response
@@ -206,10 +192,7 @@ def add_legacy_app():
     try:
         req_data = request.get_json()
         app_name = req_data['app_name']
-        #print(user_password)
         roleStatus = UserList.get_user_by_id(login_session['id'])
-        #print (roleStatus)
-        #Function to get all the password in the database
         if roleStatus:
             result = LegacyApp.add_new_legacy_app(app_name)
             return jsonify({"Message": "Succesfuly saved"}), 201
@@ -267,15 +250,6 @@ def update_complexity():
             
     else:
         return jsonify({"Message": "Missing information, wrong keys or invalid JSON."}), 401
-
-
-#Check sample db relationship
-#Password complexity renew process 
-@app.route('/check_db', methods=['GET'])
-def check():
-    response = Child.get_all_child()
-    result =  make_response(jsonify({"status": response}))
-    return result
 
 
 

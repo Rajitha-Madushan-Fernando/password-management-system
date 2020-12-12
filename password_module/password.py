@@ -15,7 +15,7 @@ class Password:
     def check_hibp(password):
         # Required: A descriptive user agent must be set describing the application consuming
         #   the HIBP API
-        pyhibp.set_user_agent(ua="Awesome application/0.0.1 (An awesome description)")
+        pyhibp.set_user_agent(ua="PMS-User")
 
         # Check a password to see if it has been disclosed in a public breach corpus
         resp = pw.is_password_breached(password=password)
@@ -92,10 +92,11 @@ class Password:
         return password_hash
 
     @staticmethod
-    def verify_password(password,hash_password):
+    def verify_password(hash_password,password):
         #print (password)
         #print (hash_password)
-        passsword_status =  bcrypt.checkpw(hash_password.encode("utf-8"), password)
+        hash_pwd=hash_password.encode("utf-8")
+        passsword_status =  bcrypt.checkpw(hash_pwd, password)
         return passsword_status
 
 

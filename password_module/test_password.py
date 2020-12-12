@@ -27,8 +27,14 @@ class PasswordTest(unittest.TestCase):
        self.assertFalse(pwd.check_hibp(self.password5))
 
         
-       
+    def test_password_validity(self):
+        self.assertTrue(pwd.verify_password(self.password1, pwd.hash_pwd(self.password1)))  
+        self.assertTrue(pwd.verify_password(self.password2, pwd.hash_pwd(self.password2)))  
+        self.assertFalse(pwd.verify_password(self.password1, pwd.hash_pwd(self.password4)))  
+        self.assertFalse(pwd.verify_password(self.password3, pwd.hash_pwd(self.password5)))  
         
+    def tearDown(self):
+        pass   
 
 
    

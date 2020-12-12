@@ -116,7 +116,7 @@ def login():
                 Message = "Your password meet complexity."
 
 
-            if  Password.verify_password(current_pwd,entered_password):
+            if  Password.verify_password(entered_password, current_pwd):
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                 token = jwt.encode({'exp': expiration_date}, app.config['SECRET_KEY'], algorithm = 'HS256')

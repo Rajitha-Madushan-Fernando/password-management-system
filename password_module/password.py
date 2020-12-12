@@ -20,8 +20,8 @@ class Password:
         # Check a password to see if it has been disclosed in a public breach corpus
         resp = pw.is_password_breached(password=password)
         if resp:
-            print("Password breached!")
-            print("This password was used {0} time(s) before.".format(resp))
+            #print("Password breached!")
+            #print("This password was used {0} time(s) before.".format(resp))
             return True
         # Get data classes in the HIBP system
         resp = pyhibp.get_data_classes()

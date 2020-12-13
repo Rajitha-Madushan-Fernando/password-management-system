@@ -42,7 +42,7 @@ def token_required(f):
             return f(*args,  **kwargs)
         except:
             return jsonify({
-                'Error Meesage': "Missing information, wrong keys or invalid Token"
+                'Error Meesage': "Your token is expired! Please login in again"
             }), 401
 
     return decorator
@@ -81,7 +81,7 @@ def register():
             return jsonify({"Message": "Succesfuly saved"}), 201
 
     except (KeyError, exceptions.BadRequest):
-        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # User registration module end
 
 # User list retrive module start
@@ -145,7 +145,7 @@ def login():
                 'Error Meesage': error_message
             }), 401
     except (KeyError, exceptions.BadRequest):
-        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again')
 # User login module end
 
 
@@ -176,7 +176,7 @@ def check_pwd():
             return jsonify({"Message": "Succesfuly saved"}), 201
 
     except (KeyError, exceptions.BadRequest):
-        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
 
 @app.route('/pwd_list', methods=['GET'])
@@ -206,7 +206,7 @@ def add_legacy_app():
             return jsonify({"Message": "Only Admin can create new applications"}), 401
 
     except (KeyError, exceptions.BadRequest):
-        return jsonify(Process='ERROR!', Process_Message='Missing information, wrong keys or invalid JSON.')
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again')
 
 
 @app.route('/app_list', methods=['GET'])

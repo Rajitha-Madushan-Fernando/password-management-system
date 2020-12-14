@@ -127,8 +127,7 @@ def login():
             if Password.verify_password(entered_password, current_pwd):
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-                token = jwt.encode({'exp': expiration_date},
-                                   app.config['SECRET_KEY'], algorithm='HS256')
+                token = jwt.encode({'exp': expiration_date},app.config['SECRET_KEY'], algorithm='HS256')
                 return jsonify({
                     'token': token.decode('utf-8'),
                     'user-id': user.id,

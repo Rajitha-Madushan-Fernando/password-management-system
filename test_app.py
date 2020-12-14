@@ -11,9 +11,7 @@ class AppTest(unittest.TestCase):
         self.app.testing = True
         self.app.token = ""
 
-
-
-
+    #Test user registration module
     def test_resgister(self):
         response = self.app.post('/signin', 
             data = dumps({
@@ -21,13 +19,13 @@ class AppTest(unittest.TestCase):
                 'password': '34D*&%Wgsju!',
                 'email': 'test@yahoo.com',
                 'role': 'USER',
-                'pwdcriteastatus':1 
+                'pwdcriteastatus':1 #This is either 1 or 0 
             }), content_type='application/json'
         )
         self.assertEqual(response.status_code, 201), "This response should success(201)"
     
-
-    def test_login(self):
+    #Test Login module using  test@yahoo.com and  password = "34D*&%Wgsju!" 
+    def test_login_by_correct_data(self):
         response = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",
@@ -40,12 +38,21 @@ class AppTest(unittest.TestCase):
         self.assertEqual(reponse_data["user-id"], 4)
         self.assertEqual(response.status_code, 200)
        
-
+    #Test Login module using  sample@yahoo.com and  password = "342123&%Wgsju!" 
+    def test_login_by_incorrect_data(self):
+        response = self.app.post('/login', 
+            data = dumps({
+                "email":"sample@yahoo.com",
+                "password": "342123&%Wgsju!",
+            }), content_type='application/json'
+        )
+        #print (response.data)
+        reponse_data = loads((response.data))
+        self.assertEqual(response.status_code, 401)
     
     def test_get_pwd_list_without_valid_token(self):
         response = self.app.get('/pwd_list',
-             data = dumps({
-            }), content_type='application/json'
+             data = dumps({}), content_type='application/json'
         )
         #print(response.data)
         reponse_data = loads((response.data))
@@ -58,6 +65,9 @@ class AppTest(unittest.TestCase):
         token = loads((resp_login.data))   
         response = self.app.get('/pwd_list', headers={ 'x-access-tokens': token["token"]})
         self.assertEqual(response.status_code, 200)
+
+
+    
 
 
     def tearDown(self):

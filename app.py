@@ -23,7 +23,7 @@ from db_models.pms_models import UserList
 
 # Access controll module
 # Without having a proper JWWT authentication token cannot access to API
-app.config['SECRET_KEY'] = 'rajithasecretkey'
+app.config['SECRET_KEY'] = 'rajithasecretkey!@#^&*!)KDJ'
 
 
 def token_required(f):
@@ -90,16 +90,19 @@ def register():
 @app.route('/all_users', methods=['GET'])
 @token_required
 def get_users():
-    # Check this user role is ADMIN or USER
-    roleStatus = UserList.get_user_by_id(login_session['id'])
-    # Function to get all the password in the database
-    if roleStatus:
-        result = UserList.get_all_users()
-        print(result)
-        result = make_response(jsonify({"status": result}))
-        return result
-    else:
-        return jsonify({"Message": "Only Admin can see all users"}), 401
+    try:
+        # Check this user role is ADMIN or USER
+        roleStatus = UserList.get_user_by_id(login_session['id'])
+        # Function to get all the password in the database
+        if roleStatus:
+            result = UserList.get_all_users()
+            print(result)
+            result = make_response(jsonify({"status": result}))
+            return result
+        else:
+            return jsonify({"Message": "Only Admin can see all users"}), 401
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # User list retrive module end
 
 
@@ -145,8 +148,16 @@ def login():
                 'Error Meesage': error_message
             }), 401
     except (KeyError, exceptions.BadRequest):
-        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again')
+        return jsonify(Process='ERROR!', Process_Message='Something went wrong! Please login in again')
 # User login module end
+
+#User logout module start
+#@app.route('/logout',  methods=['POST', 'GET'])
+#def logout():
+#   if login_session['token']:
+#        login_session.pop(login_session['token'],None)
+#    return jsonify({'message' : 'You successfully logged out'})
+#User logout module end
 
 
 # Password module start
@@ -161,8 +172,7 @@ def check_pwd():
 
         # user defined functions
         hibp_result = Password.check_hibp(user_password)
-        is_complexity, complexity_result_msg = Password.check_complexity(
-            user_password)
+        is_complexity, complexity_result_msg = Password.check_complexity(user_password)
         hash_result = Password.hash_pwd(user_password)
 
         if is_complexity is False:
@@ -182,10 +192,13 @@ def check_pwd():
 @app.route('/pwd_list', methods=['GET'])
 @token_required
 def get_pwd():
-    '''Function to get all the password in the database'''
-    result = PasswordList.get_all_password(login_session['id'])
-    response = make_response(jsonify({"status": result}))
-    return response
+    #Function to get all the password in the database
+    try:
+        result = PasswordList.get_all_password(login_session['id'])
+        response = make_response(jsonify({"status": result}))
+        return response
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # Password module end
 
 
@@ -213,17 +226,23 @@ def add_legacy_app():
 @token_required
 def get_legacy_app():
     # Function to get all the app list in the database
-    result = LegacyApp.get_all_legacy_app()
-    response = make_response(jsonify({"status": result}))
-    return response
+    try:
+        result = LegacyApp.get_all_legacy_app()
+        response = make_response(jsonify({"status": result}))
+        return response
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # Legacy Application module finished
 
 
 # Password complexity renew process
 @app.route('/get_pwd_criteria', methods=['POST', 'GET'])
 def get_complexity():
-    response = PasswordComplexityEdit.getComplexity()
-    return response
+    try:
+        response = PasswordComplexityEdit.getComplexity()
+        return response
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
 
 @app.route('/update_pwd_criteria', methods=['POST'])
@@ -238,30 +257,32 @@ def update_complexity():
     maxLength = request_data['maxLength']
     minLength = request_data['minLength']
     specialCharaterList = request_data['specialCharaterList']
+    try:
+        data = {
+            "charaterType": charaterType,
+            "existLowerCase": existLowerCase,
+            "existNumber": existNumber,
+            "existSpecialCharacter": existSpecialCharacter,
+            "existUpperCase": existUpperCase,
+            "maxLength": maxLength,
+            "minLength": minLength,
+            "specialCharaterList": specialCharaterList
+        }
+        result = PasswordComplexityEdit.updateComplexity(data)
+        roleStatus = UserList.get_user_by_id(login_session['id'])
+        if roleStatus:
+            if result is True:
+                response = UserList.update_user_satus()
+                # return response
+                if response is True:
+                    return jsonify({"Message": "Password complexity succesfully updated!"}), 200
 
-    data = {
-        "charaterType": charaterType,
-        "existLowerCase": existLowerCase,
-        "existNumber": existNumber,
-        "existSpecialCharacter": existSpecialCharacter,
-        "existUpperCase": existUpperCase,
-        "maxLength": maxLength,
-        "minLength": minLength,
-        "specialCharaterList": specialCharaterList
-    }
-    result = PasswordComplexityEdit.updateComplexity(data)
-    roleStatus = UserList.get_user_by_id(login_session['id'])
-    if roleStatus:
-        if result is True:
-            response = UserList.update_user_satus()
-            # return response
-            if response is True:
-                return jsonify({"Message": "Password complexity succesfully updated!"}), 200
-
+            else:
+                return jsonify({"Message": "Missing information, wrong keys or invalid JSON."}), 401
         else:
-            return jsonify({"Message": "Missing information, wrong keys or invalid JSON."}), 401
-    else:
-        return jsonify({"Message": "Only Admin can update password complexity"}), 401
+            return jsonify({"Message": "Only Admin can update password complexity"}), 401
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
 # Run server
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ class AppTest(unittest.TestCase):
         self.assertEqual(reponse_data["user-id"], 4)
         self.assertEqual(response.status_code, 200)
        
-    #Test Login module using  sample@yahoo.com and  password = "342123&%Wgsju!" 
+    #Test Login module using  incorrect username and password(sample@yahoo.com and  password = "342123&%Wgsju!") 
     def test_login_by_incorrect_data(self):
         response = self.app.post('/login', 
             data = dumps({
@@ -50,6 +50,7 @@ class AppTest(unittest.TestCase):
         reponse_data = loads((response.data))
         self.assertEqual(response.status_code, 401)
     
+    #Test Login module using  without valid token" 
     def test_get_pwd_list_without_valid_token(self):
         response = self.app.get('/pwd_list',
              data = dumps({}), content_type='application/json'
@@ -59,16 +60,40 @@ class AppTest(unittest.TestCase):
         self.assertEqual(reponse_data["Error Meesage"], "A Valid token is missing!")
         self.assertEqual(response.status_code, 401)
     
-
+    #Test Login module using  with valid token" 
     def test_get_pwd_list_with_valid_token(self):
-        resp_login = self.app.post('/login', data = dumps({"email":"test@yahoo.com","password": "34D*&%Wgsju!"}), content_type='application/json')
-        token = loads((resp_login.data))   
-        response = self.app.get('/pwd_list', headers={ 'x-access-tokens': token["token"]})
-        self.assertEqual(response.status_code, 200)
+        resp_login = self.app.post('/login', 
+            data = dumps({
+                "email":"test@yahoo.com",
+                "password": "34D*&%Wgsju!",
+            }),content_type='application/json'
+        )
+        token = loads(resp_login.data)
+        decoded_token = token["token"]
+        response = self.app.get('/pwd_list', headers={ 'x-access-tokens': decoded_token})
+        #self.assertEqual(response.status_code, 200)
+    
+    #Test add password without checking HIBP status, Complexity status and Hash
+    def test_add_pwd(self):
+        response = self.app.post('/add_pwd', 
+            data = dumps({
+                'user_id':1,
+                'user_password':'34D*&%Wgsju!',
+                'app_id':1,
+            }), content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 401), "This response should error(401)"
 
-
-
-
+    #Test add password with checking HIBP status, Complexity status and Hash
+    def test_add_pwd_with_other_conditions(self):
+        response = self.app.post('/add_pwd', 
+            data = dumps({
+                'user_id':1,
+                'user_password':'34D*&%Wgsju!',
+                'app_id':1,
+            }), content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 401), "This response should error(401)"
 
     def tearDown(self):
         pass   

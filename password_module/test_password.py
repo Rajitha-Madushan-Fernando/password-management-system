@@ -1,6 +1,5 @@
 import unittest
-from .password import Password as pwd
-
+from password import Password as pwd
 
 class PasswordTest(unittest.TestCase):
 
@@ -38,7 +37,11 @@ class PasswordTest(unittest.TestCase):
         self.assertTrue(pwd.verify_password(self.password2, pwd.hash_pwd(self.password2)))#Both user same passwords  
         self.assertFalse(pwd.verify_password(self.password1, pwd.hash_pwd(self.password4)))#Use Different passwords  
         self.assertFalse(pwd.verify_password(self.password3, pwd.hash_pwd(self.password5)))#Use Different passwords  
-        
+
+
+
+
+
     def tearDown(self):
         pass   
 

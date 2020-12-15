@@ -123,3 +123,5 @@ class UserList(db.Model):
             'email': self.email,
             'role': self.role
         }
+
+db.create_all()

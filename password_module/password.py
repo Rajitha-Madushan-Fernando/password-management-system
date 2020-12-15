@@ -116,6 +116,7 @@ class Password:
         print(ciphered_text)
         return ciphered_text
 
+
     def decrypt_pwd(cipher_text):
         #print("---------db ciper ",cipher_text)
         #print("---------hardcoded ciper ",cipher_text)

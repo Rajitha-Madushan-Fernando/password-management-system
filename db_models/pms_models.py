@@ -64,7 +64,6 @@ class PasswordList(db.Model):
     def json(self):
         return {
             'id': self.id,
-            #'password': "*************",
             'password':Password.decrypt_pwd(self.password),
             'app_name': self.parent.app_name,
             'url': self.parent.url,

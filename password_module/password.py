@@ -11,6 +11,7 @@ from Cryptodome.Random import get_random_bytes
 import string
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+#This key is use to decrypt the password
 genrated_key = b'N\xf7\xcbd\xcc\xd4\xa9\xd6\xb0\xa1}\xcd\x19W\xf5%\x97\x841\xd5l93E\x82gPy\xd6Y\x920'
 
 class Password:
@@ -116,16 +117,13 @@ class Password:
         return ciphered_text
 
     def decrypt_pwd(cipher_text):
-        print("---------db ciper ",cipher_text)
-        #cipher_text = b'8EF*\xbcp}\x90F\xd9\x8e\xca\xe6\x94t/\xed#\xa6\x8f\xa6\x8f\x80\xee\xf4\xd8\x9a4\xc8>\xc2\xb2'
-        print("---------hardcoded ciper ",cipher_text)
+        #print("---------db ciper ",cipher_text)
+        #print("---------hardcoded ciper ",cipher_text)
         cipher = AES.new(genrated_key, AES.MODE_ECB)
         deciphered_bytes = cipher.decrypt(cipher_text)
-        print("--------deciphered_bytes")
-        print(deciphered_bytes)
+        #print("--------deciphered_bytes")
+        #print(deciphered_bytes)
         decrypted_data = deciphered_bytes.decode('utf-8')
-        print("--------decrypted_data")
-        print(decrypted_data)
-        print("--------")
-        return decrypted_data
+        #print(decrypted_data)
+        return ''.join(x for x in decrypted_data if x in string.printable)
         

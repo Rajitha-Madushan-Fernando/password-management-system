@@ -187,7 +187,6 @@ def check_pwd():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
-
 @app.route('/pwd_list', methods=['GET'])
 @token_required
 def get_pwd():

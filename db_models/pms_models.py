@@ -9,6 +9,8 @@ import json
 import os
 
 
+# Import user defined libs
+from password_module.password import Password
 
 #Create Legacy application model, database table and fields
 class LegacyApp(db.Model):
@@ -55,15 +57,15 @@ class PasswordList(db.Model):
         return new_pwd
 
     def get_all_password(_user_id):
-        result = [PasswordList.json(password) for password in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
-        print (result)
+        result = [PasswordList.json(record) for record in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
         return result
 
-  
+    
     def json(self):
         return {
             'id': self.id,
-            'password': "*************",
+            #'password': "*************",
+            'password':Password.decrypt_pwd(self.password),
             'app_name': self.parent.app_name,
             'url': self.parent.url,
             'description': self.parent.description

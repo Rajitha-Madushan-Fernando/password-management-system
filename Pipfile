@@ -17,6 +17,9 @@ jsonpickle = "*"
 flask-json = "*"
 flask-restless = "*"
 requests = "*"
+simple-crypt = "*"
+pycryptodome = "*"
+cryptography = "*"
 
 [dev-packages]
 

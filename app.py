@@ -172,8 +172,8 @@ def check_pwd():
         # user defined functions
         hibp_result = Password.check_hibp(user_password)
         is_complexity, complexity_result_msg = Password.check_complexity(user_password)
-        hash_result = Password.hash_pwd(user_password)
-
+        encry_result = Password.encrypt_password(user_password)
+        #return encry_result
         if is_complexity is False:
             return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
 
@@ -181,7 +181,7 @@ def check_pwd():
             return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
         else:
-            response = PasswordList.add_app_pwd(hash_result, user_id, app_id)
+            response = PasswordList.add_app_pwd(encry_result, user_id, app_id)
             return jsonify({"Message": "Succesfuly saved"}), 201
 
     except (KeyError, exceptions.BadRequest):

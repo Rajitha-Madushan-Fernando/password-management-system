@@ -1,17 +1,4 @@
 from database_config import *
-from flask import Flask, request, Response, jsonify, make_response
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-import json
-import os
-import jwt
-import datetime
-import uuid
-from functools import wraps
-from flask import session as login_session
-# Exception lib
-from werkzeug import exceptions
-
 
 # Import user defined libs
 from password_module.password import Password
@@ -170,20 +157,24 @@ def check_pwd():
         user_id = login_session['id']
         app_id = req_data['app_id']
 
-        # user defined functions
-        hibp_result = Password.check_hibp(user_password)
-        is_complexity, complexity_result_msg = Password.check_complexity(user_password)
-        encry_result = Password.encrypt_password(user_password)
-        #return encry_result
-        if is_complexity is False:
-            return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
+        appIsExist = LegacyApp.check_app_id(app_id)
+        if appIsExist:
+            # user defined functions
+            hibp_result = Password.check_hibp(user_password)
+            is_complexity, complexity_result_msg = Password.check_complexity(user_password)
+            encry_result = Password.encrypt_password(user_password)
+            #return encry_result
+            if is_complexity is False:
+                return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
 
-        elif hibp_result is True:
-            return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+            elif hibp_result is True:
+                return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
+            else:
+                response = PasswordList.add_app_pwd(encry_result, user_id, app_id)
+                return jsonify({"Message": "Succesfuly saved"}), 201
         else:
-            response = PasswordList.add_app_pwd(encry_result, user_id, app_id)
-            return jsonify({"Message": "Succesfuly saved"}), 201
+            return jsonify({"Message": "The entered app id is not in the database"}), 401
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')

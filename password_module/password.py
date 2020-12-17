@@ -1,6 +1,4 @@
 from database_config import *
-from flask import Flask, request, jsonify
-from json import load
 import pyhibp
 from pyhibp import pwnedpasswords as pw
 import bcrypt
@@ -109,18 +107,12 @@ class Password:
         data = plain_text.encode('utf-8')
         cipher = AES.new(key, AES.MODE_ECB)
         ciphered_text = cipher.encrypt(pad(data,BLOCK_SIZE))
-        print(ciphered_text)
         return ciphered_text
 
 
     def decrypt_pwd(cipher_text):
-        #print("---------db ciper ",cipher_text)
-        #print("---------hardcoded ciper ",cipher_text)
         cipher = AES.new(genrated_key, AES.MODE_ECB)
         deciphered_bytes = cipher.decrypt(cipher_text)
-        #print("--------deciphered_bytes")
-        #print(deciphered_bytes)
         decrypted_data = deciphered_bytes.decode('utf-8')
-        #print(decrypted_data)
         return ''.join(x for x in decrypted_data if x in string.printable)
         

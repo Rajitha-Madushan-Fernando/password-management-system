@@ -2,11 +2,7 @@
 #This file contain all database classes {User, Password, Legacy App}
 #Import all required libraries
 from database_config import *
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from datetime import datetime
-import json
-import os
 
 
 # Import user defined libs
@@ -32,6 +28,13 @@ class LegacyApp(db.Model):
 
     def get_all_legacy_app():
         return [LegacyApp.json(legacyApp) for legacyApp in LegacyApp.query.all()]
+
+    def check_app_id(app_id):
+        appIsExist = LegacyApp.query.filter_by(id=app_id).first()
+        if appIsExist is None:
+            return False
+        else:
+            return True
 
     def json(self):
         return {
@@ -60,6 +63,7 @@ class PasswordList(db.Model):
         result = [PasswordList.json(record) for record in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
         return result
 
+    
     
     def json(self):
         return {
@@ -125,3 +129,6 @@ class UserList(db.Model):
         }
 
 db.create_all()
+#add_admin = UserList(username="admin",password="23gD*&%Wgsju!",email="admin@admin.com",role='ADMIN', passwordCriteraStatus=1)
+#db.session.add(add_admin)  # add new password to database session
+#db.session.commit()  # commit changes to session

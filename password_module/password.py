@@ -9,13 +9,10 @@ import string
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 #This key is use to decrypt the password
-#genrated_key1 = b'N\xf7\xcbd\xcc\xd4\xa9\xd6\xb0\xa1}\xcd\x19W\xf5%\x97\x841\xd5l93E\x82gPy\xd6Y\x920'
-genrated_key = os.environ[current_env+'_encryptkey'].encode('utf_8')
-print(genrated_key, type(genrated_key))
-#print(genrated_key1, type(genrated_key1))
-class Password:
+genrated_key = os.environ[current_env+'_encryptkey'].encode('utf-8')
 
-    
+
+class Password:
     @staticmethod
     def check_hibp(password):
         # Required: A descriptive user agent must be set describing the application consuming

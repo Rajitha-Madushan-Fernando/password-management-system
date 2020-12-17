@@ -59,7 +59,7 @@ class Password:
             spCharaterList = criteria['specialCharaterList']
             maxLen = criteria['maxLength']
             minLen = criteria['minLength']
-            chaType = criteria['charaterType']
+            charaterType = criteria['charaterType']
             
             #print (spCharaterList)
             
@@ -81,7 +81,10 @@ class Password:
 
             elif any(cha in spCharaterList for cha in password) != True:
                 return False, "Make sure your password contain one special charater"
-
+        
+            elif any(cha not in charaterType for cha in password):
+                return False, "Make sure to enter allowed charaters"
+                
             else:
                 return True, "Password suceess"
 

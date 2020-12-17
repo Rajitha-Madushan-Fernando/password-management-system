@@ -19,7 +19,7 @@ class PasswordTest(unittest.TestCase):
         self.assertEqual(pwd.check_complexity(self.password4), (False, 'Make sure your password is at least 8 letters'),  'Failed Password Test : Make sure your password is at least 8 letters')
         self.assertEqual(pwd.check_complexity(self.password5), (True, 'Password suceess'), 'Password suceess')
         self.assertEqual(pwd.check_complexity(self.password6), (False, 'Make sure your password is at max 16 letters'),  'Failed Password Test : Make sure your password is at max 16 letters')
-
+    
     def test_hibp(self):
         #Using the PyHIBP  API check the inserted password is leaked password or not
         #Last test data : 14/12/2020

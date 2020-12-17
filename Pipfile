@@ -20,6 +20,7 @@ requests = "*"
 simple-crypt = "*"
 pycryptodome = "*"
 cryptography = "*"
+flask-environments = "*"
 
 [dev-packages]
 

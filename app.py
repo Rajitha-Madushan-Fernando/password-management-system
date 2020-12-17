@@ -21,10 +21,10 @@ from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
 
 
+app.config['SECRET_KEY'] = os.environ[current_env+'_secretkey']
+
 # Access controll module
 # Without having a proper JWWT authentication token cannot access to API
-app.config['SECRET_KEY'] = 'rajithasecretkey!@#^&*!)KDJ'
-
 
 def token_required(f):
     @wraps(f)
@@ -158,16 +158,6 @@ def login():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Something went wrong! Please login in again')
 # User login module end
-
-#User logout module start
-#@app.route('/logout',  methods=['POST'])
-#@token_required
-#def logout():
-#    session.pop(login_session['logged_in'], None)
-#    return jsonify({
-#        'Error Meesage': 'You were logged out.'
-#   }), 200
-#User logout module end
 
 
 # Password module start

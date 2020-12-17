@@ -1,15 +1,23 @@
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
-
+#Cryto libs
+from Crypto.Util.Padding import pad, unpad
+from Cryptodome.Cipher import AES
+from Cryptodome.Random import get_random_bytes
+#Load envirement variables
+load_dotenv()
+current_env = os.environ['FLASK_ENV']
+#print(current_env)
 #init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 #Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, os.environ[current_env+'_DB'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initializing our database

@@ -61,24 +61,32 @@ def register():
         email = request_data['email']
         role = request_data['role']
         pwdcriteastatus = 1
-
-        hibp_result = Password.check_hibp(password)
-        is_complexity, complexity_result_msg = Password.check_complexity(
-            password)
-        hash_result = Password.hash_pwd(password)
-
-        if is_complexity is False:
-            return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
-
-        elif hibp_result is True:
-            return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
-
+        #Check this email address is already exist or not
+        user = UserList.check_login(email)
+        if user:
+            error_message = "This email address is already registered!"
+            return jsonify({
+                'Error Meesage': error_message
+            }), 401
         else:
-            # return jsonify(Process='SUCESS!', Process_Message='Good Password!')
-            # return jsonify(hash_result)
-            response = UserList.add_new_user(
-                username, hash_result, email, role, pwdcriteastatus)
-            return jsonify({"Message": "Succesfuly saved"}), 201
+            hibp_result = Password.check_hibp(password)
+            is_complexity, complexity_result_msg = Password.check_complexity(
+                password)
+            hash_result = Password.hash_pwd(password)
+
+            if is_complexity is False:
+                return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
+
+            elif hibp_result is True:
+                return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+
+            else:
+                # return jsonify(Process='SUCESS!', Process_Message='Good Password!')
+                # return jsonify(hash_result)
+                response = UserList.add_new_user(
+                    username, hash_result, email, role, pwdcriteastatus)
+                return jsonify({"Message": "Succesfuly saved"}), 201
+
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
@@ -128,6 +136,7 @@ def login():
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                 token = jwt.encode({'exp': expiration_date},app.config['SECRET_KEY'], algorithm='HS256')
+                login_session['logged_in'] = True
                 return jsonify({
                     'token': token.decode('utf-8'),
                     'user-id': user.id,
@@ -151,11 +160,13 @@ def login():
 # User login module end
 
 #User logout module start
-#@app.route('/logout',  methods=['POST', 'GET'])
+#@app.route('/logout',  methods=['POST'])
+#@token_required
 #def logout():
-#   if login_session['token']:
-#        login_session.pop(login_session['token'],None)
-#    return jsonify({'message' : 'You successfully logged out'})
+#    session.pop(login_session['logged_in'], None)
+#    return jsonify({
+#        'Error Meesage': 'You were logged out.'
+#   }), 200
 #User logout module end
 
 

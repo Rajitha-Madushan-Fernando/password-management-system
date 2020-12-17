@@ -158,7 +158,7 @@ def check_pwd():
         app_id = req_data['app_id']
 
         appIsExist = LegacyApp.check_app_id(app_id)
-        if appIsExist:
+        if appIsExist is True:
             # user defined functions
             hibp_result = Password.check_hibp(user_password)
             is_complexity, complexity_result_msg = Password.check_complexity(user_password)

@@ -37,9 +37,7 @@ class PasswordTest(unittest.TestCase):
         self.assertFalse(Password.verify_password(self.password1, Password.hash_pwd(self.password4)))#Use Different passwords  
         self.assertFalse(Password.verify_password(self.password3, Password.hash_pwd(self.password5)))#Use Different passwords  
 
-
-
-
+    
 
     def tearDown(self):
         pass   

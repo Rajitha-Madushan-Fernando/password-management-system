@@ -30,11 +30,12 @@ class LegacyApp(db.Model):
         return [LegacyApp.json(legacyApp) for legacyApp in LegacyApp.query.all()]
 
     def check_app_id(app_id):
-        appIsExist = LegacyApp.query.filter_by(id=app_id).first()
-        if appIsExist is None:
+        exists = LegacyApp.query.filter_by(id=app_id).scalar()
+        if exists is None:
             return False
         else:
             return True
+        
 
     def json(self):
         return {

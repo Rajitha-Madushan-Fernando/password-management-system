@@ -1,4 +1,5 @@
 from database_config import *
+from json import load
 import pyhibp
 from pyhibp import pwnedpasswords as pw
 import bcrypt

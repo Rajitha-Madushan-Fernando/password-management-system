@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 1. Fork/Clone
 2. Activate a virtualenv
 3. Install all dependencies from a pipfile
-`pipenv install --dev`
+`$ pipenv install --dev`
 
 ##### Select the environment to run the application
 This password management system  contain **Test** and **Development** environments

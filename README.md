@@ -16,14 +16,22 @@ This password management system  contain **Test** and **Development** environmen
 
 ##### To run this API under Development environment
 
-    export FLASK_ENV=development 
+    
 
-    python app.py 
+    $ export FLASK_ENV=development 
+
+   
+
+    $ python app.py 
 
 ##### To run this API under Testing environment / To run all unit test cases and remove all Deprecation Warning 
 
 
-    export FLASK_ENV=test
+    
 
-    pytest . -W ignore::DeprecationWarning
+    $ export FLASK_ENV=test
+
+    
+
+    $ pytest . -W ignore::DeprecationWarning
 

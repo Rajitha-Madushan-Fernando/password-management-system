@@ -11,14 +11,15 @@ class PasswordTest(unittest.TestCase):
         self.password6 = '34D*&%Wgsju!34D*&%Wgsju!34D*&%Wgsju!'
 
     def test_complexity(self):
-        #Using password complexity json file and check whether password meets the requirement.
         self.assertEqual(Password.check_complexity(self.password1), (False, 'Make sure your password contain one number'))
-        self.assertEqual(Password.check_complexity(self.password2), (False, 'Make sure your password contain one uppercase letter'))
-        self.assertEqual(Password.check_complexity(self.password3), (False, 'Make sure your password contain one special charater'))
-        self.assertTrue(Password.check_complexity(self.password3),  (False, 'Make sure your password contain one lowercase letter'))
+        self.assertEqual(Password.check_complexity(self.password1+'1A#ß'), (False, 'Make sure to enter allowed charaters'))
+        self.assertEqual(Password.check_complexity(self.password1+'1'), (False, 'Make sure your password contain one uppercase letter'))
+        self.assertEqual(Password.check_complexity(self.password1+'1A'), (False, 'Make sure your password contain one special charater'))
+        self.assertEqual(Password.check_complexity(self.password1+'1A#'), (True, 'Password suceess'))
+        self.assertEqual(Password.check_complexity(self.password2+'A'), (False, 'Make sure your password contain one lowercase letter'))
         self.assertEqual(Password.check_complexity(self.password4), (False, 'Make sure your password is at least 8 letters'))
-        self.assertEqual(Password.check_complexity(self.password5), (True, 'Password suceess'), 'Password suceess')
         self.assertEqual(Password.check_complexity(self.password6), (False, 'Make sure your password is at max 16 letters'))
+        
 
     def test_hibp(self):
         #Using the PyHIBP  API check the inserted password is leaked password or not
@@ -38,11 +39,12 @@ class PasswordTest(unittest.TestCase):
         self.assertFalse(Password.verify_password(self.password3, Password.hash_pwd(self.password5)))#Use Different passwords  
 
     
+    
 
     def tearDown(self):
         pass   
 
-
+    
    
 if __name__ == '__main__':
     unittest.main()

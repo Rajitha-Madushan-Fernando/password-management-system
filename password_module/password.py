@@ -75,7 +75,6 @@ class Password:
                 else:
                     pass
                     
-            
             if upperCase is True: 
                 if any(password.isupper() for password in password) != upperCase:
                     return False, "Make sure your password contain one uppercase letter"
@@ -94,7 +93,6 @@ class Password:
                 else:
                     pass
             
-                    
             if any(cha not in charaterType for cha in password):
                 return False, "Make sure to enter allowed charaters"
                 

@@ -10,7 +10,7 @@ class AppTest(unittest.TestCase):
         self.app  = app.test_client()
         self.app.testing = True
         self.app.token = ""
-
+    
     
 
     def tearDown(self):

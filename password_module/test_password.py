@@ -1,3 +1,11 @@
+#Unit test case Password Module
+#This test case include following sub test cases
+    #Test Password complexity using different parameters
+    #Test the password is Leaked password or Not( Using Thrid Party API - HIBP)
+    #Verifies that a password matches a hash using (password_verify) function
+    #Test Encrypt and Decrypt functions (Cannot store password as a plain text.PMS successfully encrypt the password) 
+#Last Test date : 2020-12-18
+#Developer : Rajitha Fernando
 import unittest
 from .password import Password as Password
 class PasswordTest(unittest.TestCase):
@@ -23,7 +31,6 @@ class PasswordTest(unittest.TestCase):
 
     def test_hibp(self):
         #Using the PyHIBP  API check the inserted password is leaked password or not
-        #Last test data : 14/12/2020
         #This is externel API process. Processing time is depend by the internet connection, computer processing power, etc
         #If the password is in this leaked list system return True
         self.assertTrue(Password.check_hibp(self.password1))
@@ -40,7 +47,7 @@ class PasswordTest(unittest.TestCase):
 
     
     def test_encrypt_decrypt_pwd(self):
-
+        #Using python cryptodome encrypt and decrypt functions to store password securely.
         cipher_text = Password.encrypt_password(self.password5)
         self.assertTrue(type(cipher_text) == bytes ) 
         decrypt_text = Password.decrypt_pwd(cipher_text)

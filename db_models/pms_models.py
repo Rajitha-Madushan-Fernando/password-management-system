@@ -18,17 +18,18 @@ class LegacyApp(db.Model):
     pwd = db.relationship('PasswordList', back_populates="parent" , lazy='joined')
 
     
-
+    #Add new legacy application to PMS    
     def add_new_legacy_app(_app_name,_url,_description):
-        # creating an instance of our password constructor
         new_legacy_app = LegacyApp(app_name=_app_name,description=_description,url=_url)
-        db.session.add(new_legacy_app)  # add new password to database session
+        db.session.add(new_legacy_app)  # create a new record
         db.session.commit()  # commit changes to session
         return new_legacy_app
 
+    #Get all legacy applications
     def get_all_legacy_app():
         return [LegacyApp.json(legacyApp) for legacyApp in LegacyApp.query.all()]
 
+    #Before add new legacy application to system, check the entered application is already in the database or not
     def check_app_id(app_id):
         exists = LegacyApp.query.filter_by(id=app_id).scalar()
         if exists is None:
@@ -36,7 +37,7 @@ class LegacyApp(db.Model):
         else:
             return True
         
-
+    #Convert to json object and render to front end | In this case
     def json(self):
         return {
             'id': self.id,
@@ -124,12 +125,9 @@ class UserList(db.Model):
         return {
             'id': self.id,
             'username': self.username,
-            'password': "************",
+            #'password': "************",
             'email': self.email,
             'role': self.role
         }
 
 db.create_all()
-#add_admin = UserList(username="admin",password="23gD*&%Wgsju!",email="admin@admin.com",role='ADMIN', passwordCriteraStatus=1)
-#db.session.add(add_admin)  # add new password to database session
-#db.session.commit()  # commit changes to session

@@ -11,7 +11,7 @@ from db_models.pms_models import UserList
 app.config['SECRET_KEY'] = os.environ[current_env+'_secretkey']
 
 # Access controll module
-# Without having a proper JWWT authentication token cannot access to API
+# Without having a proper JWT authentication token cannot access to API
 
 def token_required(f):
     @wraps(f)
@@ -36,8 +36,6 @@ def token_required(f):
 # Access controll module end
 
 # User registration module
-
-
 @app.route('/signin', methods=['POST'])
 def register():
 
@@ -80,8 +78,6 @@ def register():
 # User registration module end
 
 # User list retrive module start
-
-
 @app.route('/all_users', methods=['GET'])
 @token_required
 def get_users():
@@ -91,7 +87,6 @@ def get_users():
         # Function to get all the password in the database
         if roleStatus:
             result = UserList.get_all_users()
-            print(result)
             result = make_response(jsonify({"status": result}))
             return result
         else:
@@ -276,4 +271,4 @@ def update_complexity():
 
 # Run server
 if __name__ == '__main__':
-    app.run(debug=True)  # The user should type the machine ID here
+    app.run(debug=True)  

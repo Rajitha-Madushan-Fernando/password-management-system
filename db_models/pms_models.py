@@ -6,10 +6,12 @@ from datetime import datetime
 
 
 # Import user defined libs
+#This Password module is use to decrypt the password and send to frontend
 from password_module.password import Password
 
 #Create Legacy application model, database table and fields
 class LegacyApp(db.Model):
+    #Create a table
     __tablename__ = 'tbl_legacy_application_list'
     id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     url = db.Column(db.String(128), nullable=False )
@@ -46,6 +48,7 @@ class LegacyApp(db.Model):
 
 #Create Password  model, database table and fields
 class PasswordList(db.Model):
+    #Create a table
     __tablename__ = 'tbl_app_password_list'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     password = db.Column(db.String(128))
@@ -54,19 +57,21 @@ class PasswordList(db.Model):
     app_id = db.Column(db.Integer(), db.ForeignKey('tbl_legacy_application_list.id'))
     parent = db.relationship("LegacyApp", back_populates="pwd")
 
-   
+    #Add New Password for Legacy application
     def add_app_pwd(_password,_user_id,_app_id):
         new_pwd = PasswordList(password=_password, user_id=_user_id, app_id=_app_id)
         db.session.add(new_pwd)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_pwd
 
+    #Get all password list for current logged user. 
+    #Pass current logged user id as a parameter
     def get_all_password(_user_id):
         result = [PasswordList.json(record) for record in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
         return result
 
     
-    
+    #Convert to json object and render to front end | In this case
     def json(self):
         return {
             'id': self.id,
@@ -80,6 +85,7 @@ class PasswordList(db.Model):
 
 #Create User  model, database table and fields
 class UserList(db.Model):
+    #Create a table
     __tablename__ = 'tbl_users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32))
@@ -90,18 +96,19 @@ class UserList(db.Model):
     
     
 
-    
+    #Create new user and save in database
     def add_new_user(_username,_password,_email,_role,_passwordCriteraStatus):
-        # creating an instance of our password constructor
         new_user = UserList(role=_role,username=_username,password=_password,email=_email,passwordCriteraStatus=_passwordCriteraStatus)
         db.session.add(new_user)  # add new password to database session
         db.session.commit()  # commit changes to session
         return new_user
     
+    #Get all registered users list
     def get_all_users():
         user_list= [UserList.json(userApp) for userApp in UserList.query.all()]
         return user_list
     
+    #Filter user by ADMIN role
     def get_user_by_id(_id):
         userIsExist = UserList.query.filter_by(id=_id, role="ADMIN").first()
         if userIsExist is None:
@@ -109,6 +116,7 @@ class UserList(db.Model):
         else:
             return True
 
+    #Check the email address in the database when your trying to login to system
     def check_login(_email):
         user = UserList.query.filter_by(email=_email).first()
         if user is None:
@@ -116,11 +124,13 @@ class UserList(db.Model):
         else:
             return user
 
+    #When system admin change the password complexity update user pasword criteria status= 0
     def update_user_satus():
         update = db.session.query(UserList).filter(UserList.passwordCriteraStatus == 1).update({UserList.passwordCriteraStatus:0}, synchronize_session = False)
         db.session.commit()  # commit changes to session
         return True
-        
+
+    #Convert to json object and render to front end | In this case   
     def json(self):
         return {
             'id': self.id,

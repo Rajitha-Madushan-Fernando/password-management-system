@@ -18,7 +18,4 @@ This password management system  contain **Test** and **Development** environmen
 
     export FLASK_ENV=development 
 
-------------
-
-
     python app.py 

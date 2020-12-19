@@ -269,12 +269,15 @@ def update_complexity():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
-# Run server
-if __name__ == '__main__':
-    app.run(debug=True)  
+
+def add_admin_user():
     result = UserList.check_login("admin@admin.com")
     if result is False:
-       UserList.add_new_admin_user("admin","123DEs!678","admin@admin.com","ADMIN",1)
-    else:
-        pass
-       
+        hash_result = Password.hash_pwd('123DEs!678')
+        UserList.add_new_admin_user("admin",hash_result,"admin@admin.com","ADMIN",1)
+
+# Run server
+if __name__ == '__main__':
+    add_admin_user()
+    app.run(debug=True)  
+    

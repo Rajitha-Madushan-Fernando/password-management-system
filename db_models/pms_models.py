@@ -83,7 +83,7 @@ class PasswordList(db.Model):
             #'user_id': self.user_id
         }
 
-#Create User  model, database table and fields
+#Create User  model, databaUserListse table and fields
 class UserList(db.Model):
     #Create a table
     __tablename__ = 'tbl_users'
@@ -94,7 +94,12 @@ class UserList(db.Model):
     role = db.Column(db.String(20))
     passwordCriteraStatus = db.Column(db.Integer())
     
-    
+    #Create dummy admin User
+    def add_new_admin_user(_username,_password,_email,_role,_passwordCriteraStatus):
+        new_user = UserList(role=_role,username=_username,password=_password,email=_email,passwordCriteraStatus=_passwordCriteraStatus)
+        db.session.add(new_user)  # add new password to database session
+        db.session.commit()  # commit changes to session
+        return new_user
 
     #Create new user and save in database
     def add_new_user(_username,_password,_email,_role,_passwordCriteraStatus):

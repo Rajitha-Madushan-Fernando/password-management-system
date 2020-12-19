@@ -44,7 +44,7 @@ def register():
         username = str(request_data['username'])
         password = str(request_data['password'])
         email = request_data['email']
-        role = request_data['role']
+        role = "USER"
         pwdcriteastatus = 1
         #Check this email address is already exist or not
         user = UserList.check_login(email)
@@ -272,3 +272,9 @@ def update_complexity():
 # Run server
 if __name__ == '__main__':
     app.run(debug=True)  
+    result = UserList.check_login("admin@admin.com")
+    if result is False:
+       UserList.add_new_admin_user("admin","123DEs!678","admin@admin.com","ADMIN",1)
+    else:
+        pass
+       

@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 1. Fork/Clone
 2. Activate a virtualenv
 3. Install all dependencies from a pipfile
-To install all dependencies `pipenv install --dev`
+`$ pipenv install --dev`
 
 ##### Select the environment to run the application
 This password management system  contain **Test** and **Development** environments
@@ -26,3 +26,25 @@ This password management system  contain **Test** and **Development** environmen
 
     $ pytest . -W ignore::DeprecationWarning
 
+### System main functions
+
+#### Signup / Register to system as a new user
+`Method = POST`     `http://127.0.0.1:5000/signin`
+
+
+    {
+    	"username":"Jack",
+    	"password":"123DEs!678",
+    	"email":"jack@gmail.com",
+    	"role":"ADMIN"
+    }
+
+#### Login to System
+`Method = POST`     `http://127.0.0.1:5000/login`
+
+
+    {
+    	"email":"jack@gmail.com",
+    	"password":"123DEs!678"
+    }
+##### If you entered correct email and password System generate a Json web token to authenticate REST API End Points. This Token is necessary  to call further REST end points.

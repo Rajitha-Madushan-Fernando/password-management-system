@@ -26,3 +26,15 @@ This password management system  contain **Test** and **Development** environmen
 
     $ pytest . -W ignore::DeprecationWarning
 
+### System main functions
+
+#### Signup / Register to system as a new user
+Method = POST `http://127.0.0.1:5000/signin`
+
+
+    {
+    	"username":"Jack",
+    	"password":"123DEs!678",
+    	"email":"jack@gmail.com",
+    	"role":"ADMIN"
+    }

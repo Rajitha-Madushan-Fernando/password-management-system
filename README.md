@@ -38,3 +38,13 @@ This password management system  contain **Test** and **Development** environmen
     	"email":"jack@gmail.com",
     	"role":"ADMIN"
     }
+
+#### Login to System
+`Method = POST`     `http://127.0.0.1:5000/login`
+
+
+    {
+    	"email":"jack@gmail.com",
+    	"password":"123DEs!678"
+    }
+###### If you enter correct email and password System generate a Json web token to authenticate REST API End Points. This Token is necessary  to call further REST end points.

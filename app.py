@@ -145,7 +145,7 @@ def login():
 # Password module start
 @app.route('/add_pwd', methods=['POST'])
 @token_required
-def check_pwd():
+def add_new_pwd():
     try:
         req_data = request.get_json()
         user_password = req_data['password']
@@ -269,7 +269,7 @@ def update_complexity():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
-
+#This method generating System admin profile and cannot call by api end point
 def add_admin_user():
     result = UserList.check_login("admin@admin.com")
     if result is False:

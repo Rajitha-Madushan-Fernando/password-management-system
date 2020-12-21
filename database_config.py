@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from flask import Flask, request, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from marshmallow import Schema, fields, ValidationError
+from flask_json_schema import JsonSchema
 import os
 import json
 import jwt
@@ -27,6 +29,7 @@ current_env = os.environ['FLASK_ENV']
 
 #init app
 app = Flask(__name__)
+schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 

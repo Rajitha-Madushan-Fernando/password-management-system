@@ -6,13 +6,15 @@ from password_module.pwd_complex_edit import PasswordComplexityEdit
 from db_models.pms_models import PasswordList
 from db_models.pms_models import LegacyApp
 from db_models.pms_models import UserList
+from db_models.pms_models import UserSchema
+from db_models.pms_models import PasswordSchema
+from db_models.pms_models import LegacyAppSchema
 
 
 app.config['SECRET_KEY'] = os.environ[current_env+'_secretkey']
 
 # Access controll module
 # Without having a proper JWT authentication token cannot access to API
-
 def token_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
@@ -35,8 +37,32 @@ def token_required(f):
     return decorator
 # Access controll module end
 
+
+##Input validation
+def required_params(schema):
+    def decorator(fn):
+ 
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            try:
+                schema.load(request.get_json())
+            except ValidationError as err:
+                error = {
+                    "status": "error",
+                    "messages": err.messages
+                }
+                return jsonify(error), 400
+            return fn(*args, **kwargs)
+ 
+        return wrapper
+    return decorator
+##Input validation
+
+
+
 # User registration module
 @app.route('/signin', methods=['POST'])
+@required_params(UserSchema())
 def register():
 
     try:
@@ -145,6 +171,7 @@ def login():
 # Password module start
 @app.route('/add_pwd', methods=['POST'])
 @token_required
+@required_params(PasswordSchema())
 def add_new_pwd():
     try:
         req_data = request.get_json()
@@ -190,6 +217,7 @@ def get_pwd():
 # Legacy Application module
 @app.route('/add_new_legacy_app', methods=['POST'])
 @token_required
+@required_params(LegacyAppSchema())
 def add_legacy_app():
     try:
         req_data = request.get_json()

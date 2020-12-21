@@ -145,4 +145,20 @@ class UserList(db.Model):
             'role': self.role
         }
 
+
+class UserSchema(Schema):
+    username = fields.String(required=True)
+    password = fields.String(required=True)
+    email = fields.String(required=True)
+
+class PasswordSchema(Schema):
+    app_id = fields.Integer(required=True)
+    password = fields.String(required=True)
+
+
+class LegacyAppSchema(Schema):
+    url = fields.String(required=True)
+    description = fields.String(required=True)
+    app_name = fields.String(required=True)
+
 db.create_all()

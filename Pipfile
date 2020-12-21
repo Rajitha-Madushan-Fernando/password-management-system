@@ -20,6 +20,7 @@ simple-crypt = "*"
 pycryptodome = "*"
 cryptography = "*"
 flask-environments = "*"
+flask-json-schema = "*"
 
 [dev-packages]
 

@@ -98,7 +98,7 @@ class AppTest(unittest.TestCase):
     #Once system admin change the password policy, All users will be get an NOTIFICATION when loggin to system
     #At this moment I developed only notification level. Not update module
     #Once user loging to system he or she will see "System adminstartor recently change the password policy. Please update the password!"
-    def test_force_renew_passwoord(self):
+    def test_force_renew_password(self):
         response = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",

@@ -8,9 +8,8 @@ import string
 from cryptography.fernet import Fernet
 basedir = os.path.abspath(os.path.dirname(__file__))
 #This key is use to decrypt the password
-#genrated_key = os.environ[current_env+'_encryptkey'].encode('utf-8')
-genrated_key = b'gAAAAABf4pwSQClmrePqxfd7pObcp16OSM8YKlBmet4G7-i7U1q2eXr4bfQ_gOEFNsktebHCm4TXNCSzeEnxkLAq2XJ5gi74-Q=='
-
+genrated_key = os.environ[current_env+'_encryptkey'].encode('utf-8')
+complexity_file = os.environ[current_env+'_COMPLEX']
 
 class Password:
     @staticmethod
@@ -51,7 +50,7 @@ class Password:
     
     @staticmethod
     def check_complexity(password):
-        with open(basedir + '/password_complexity.json', 'r') as file:
+        with open(basedir +'/'+complexity_file, 'r') as file:
             criteria = load(file)
             spCharater = criteria['existSpecialCharacter']
             upperCase = criteria['existUpperCase']
@@ -131,7 +130,7 @@ class Password:
         deciphered_bytes = cipher.decrypt(cipher_text)
         decrypted_data = deciphered_bytes.decode('utf-8')
         return ''.join(x for x in decrypted_data if x in string.printable)
-    
+    """
     def sample_encrypt(password):
         print(genrated_key)
         cipher_suite = Fernet(genrated_key)
@@ -141,3 +140,4 @@ class Password:
         plain_text = cipher_suite.decrypt(cipher_text)
         print(cipher_text)
         print(plain_text)
+    """

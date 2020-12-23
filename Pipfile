@@ -24,6 +24,7 @@ pycryptodome = "*"
 python-dotenv = "*"
 pyhibp = "*"
 pycryptodomex = "*"
+flask-unittest = "*"
 
 [dev-packages]
 

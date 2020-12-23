@@ -16,11 +16,14 @@ pyjwt = "*"
 flask-json = "*"
 flask-restless = "*"
 requests = "*"
-simple-crypt = "*"
-pycryptodome = "*"
 cryptography = "*"
 flask-environments = "*"
 flask-json-schema = "*"
+bandit = "*"
+pycryptodome = "*"
+python-dotenv = "*"
+pyhibp = "*"
+pycryptodomex = "*"
 
 [dev-packages]
 

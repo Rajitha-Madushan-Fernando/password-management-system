@@ -151,8 +151,11 @@ class UserSchema(Schema):
     password = fields.String(required=True)
     email = fields.String(required=True)
 
+#Implement Input Validation
 class PasswordSchema(Schema):
+    #App Id should be integer and required field
     app_id = fields.Integer(required=True)
+    #Password should be String and required field
     password = fields.String(required=True)
 
 

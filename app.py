@@ -1,5 +1,4 @@
 from database_config import *
-
 # Import user defined libs
 from password_module.password import Password
 from password_module.pwd_complex_edit import PasswordComplexityEdit
@@ -144,9 +143,12 @@ def login():
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                 token = jwt.encode({'exp': expiration_date},app.config['SECRET_KEY'], algorithm='HS256')
+                print(type(token))
+                print(token)
                 login_session['logged_in'] = True
+                token = token.decode('utf-8')
                 return jsonify({
-                    'token': token.decode('utf-8'),
+                    'token': token,
                     'user-id': user.id,
                     'email': user.email,
                     'Message': Message

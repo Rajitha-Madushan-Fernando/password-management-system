@@ -17,8 +17,7 @@ from werkzeug import exceptions
 
 #Cryto libs
 from Crypto.Util.Padding import pad, unpad
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import get_random_bytes
+from Crypto.Cipher import AES
 
 
 #Load envirement variables

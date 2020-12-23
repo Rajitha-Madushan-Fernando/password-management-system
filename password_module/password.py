@@ -5,7 +5,6 @@ from pyhibp import pwnedpasswords as pw
 import bcrypt
 import os
 import string
-from cryptography.fernet import Fernet
 basedir = os.path.abspath(os.path.dirname(__file__))
 #This key is use to decrypt the password
 genrated_key = os.environ[current_env+'_encryptkey'].encode('utf-8')
@@ -130,14 +129,4 @@ class Password:
         deciphered_bytes = cipher.decrypt(cipher_text)
         decrypted_data = deciphered_bytes.decode('utf-8')
         return ''.join(x for x in decrypted_data if x in string.printable)
-    """
-    def sample_encrypt(password):
-        print(genrated_key)
-        cipher_suite = Fernet(genrated_key)
-        print(genrated_key)
-        answer = bytes(password, encoding='utf-8')
-        cipher_text = cipher_suite.encrypt(answer)
-        plain_text = cipher_suite.decrypt(cipher_text)
-        print(cipher_text)
-        print(plain_text)
-    """
+   

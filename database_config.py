@@ -16,8 +16,8 @@ from flask import session as login_session
 from werkzeug import exceptions
 
 #Cryto libs
-from Crypto.Util.Padding import pad, unpad
-from Crypto.Cipher import AES
+from Cryptodome.Util.Padding import pad, unpad
+from Cryptodome.Cipher import AES
 
 
 #Load envirement variables

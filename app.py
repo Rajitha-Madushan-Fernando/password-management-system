@@ -146,7 +146,7 @@ def login():
                 #print(type(token))
                 login_session['logged_in'] = True
                 return jsonify({
-                    'token': token,
+                    'token': token.decode(),
                     'user-id': user.id,
                     'email': user.email,
                     'Message': Message

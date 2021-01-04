@@ -4,47 +4,45 @@ A PMS(Password Management System) is an API that helps individuals securely stor
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Want to use this project
-##### Basics
-1. Fork/Clone
-2. Activate a virtualenv
-3. Install all dependencies from a pipfile
-`$ pipenv install --dev`
+### Setup the environment
 
-##### Select the environment to run the application
-This password management system  contain **Test** and **Development** environments
-
-##### To run this API under Development environment
-
-    $ export FLASK_ENV=development 
-
-    $ python app.py 
-
-##### To run this API under Testing environment / To run all unit test cases and remove all Deprecation Warning 
-
-    $ export FLASK_ENV=test
-
-    $ pytest . -W ignore::DeprecationWarning
-
-### System main functions
-
-#### Signup / Register to system as a new user
-`Method = POST`     `http://127.0.0.1:5000/signin`
+------------
 
 
-    {
-    	"username":"Jack",
-    	"password":"123DEs!678",
-    	"email":"jack@gmail.com",
-    	"role":"ADMIN"
-    }
+-  ##### Check python version `$ python --version`
+- ##### Check pip version `$ pip --version`
+- ##### Clone the project `$ git clone https://github.com/Rajitha-Madushan-Fernando/password-management-system.git`
+-  ##### Install python virtual environment `pip install pipenv`
+- #####  Activate Python environment `pipenv shell` 
+- #####  Install required packages  `pip install -r requirements.txt` 
 
-#### Login to System
-`Method = POST`     `http://127.0.0.1:5000/login`
+### Now you ready to run the application
+
+------------
+This  password management system contain two environment variables. Test and Development.To check main functionalities, We need to run the system under **development** environment and if we want to test the system we need to run the system under **test** environment.
+
+#### Run the system under Test environment | Run the unit test cases
+##### Windows 
+	$env:FLASK_ENV = test
+	python -m unittest
+##### Linux
+	export FLASK_ENV=test
+	python -m unittest
+
+#### Run the system under Development environment
+##### Windows 
+	$env:FLASK_ENV = development
+	python -m unittest
+##### Linux
+	export FLASK_ENV=development
+	python -m unittest
+
+##### Note : Depends on your requirement you need to change the environment. Otherwise system will generate errors. Ex: If you want to use the system and check the functionalities, Then you cannot use Test environment. You need to change it to **Development environment**.
+------------
+### PMS Functionalities
+This system functions mainly devided to two categories. **ADMIN** and **USER**.  Some task can be perform by Admin only. In the first section list down all  function which required Admin access.
 
 
-    {
-    	"email":"jack@gmail.com",
-    	"password":"123DEs!678"
-    }
-##### If you entered correct email and password System generate a Json web token to authenticate REST API End Points. This Token is necessary  to call further REST end points.
+
+
+

@@ -42,7 +42,60 @@ This  password management system contain two environment variables. Test and Dev
 ### PMS Functionalities
 This system functions mainly devided to two categories. **ADMIN** and **USER**.  Some task can be perform by Admin only. In the first section list down all  function which required Admin access.
 
+##### Note : After having the  successfully login,The system generate a Json web token. For all other tasks we need to give this token as a authentication mechanisam. To do that you have to pass the token in the postman header field. 
+`x-access-tokens :  "your token goes here"`
 
+### Admin  Tasks
+##### Login to system using master password - Admin
+`http://127.0.0.1:5000/login`
+`{
+	"email": "admin@admin.com",
+	"password": "123DEs!678"
+}`
 
+##### Create new legacy application - Admin[Token Required]
+`http://127.0.0.1:5000/add_new_legacy_app`
+ `{
+    "app_name":"HRM",
+    "url":"www.sample.com",
+    "description":"Sample data"
+}`
+##### View all registered User list - Admin[Token Required]
+`http://127.0.0.1:5000/all_users`
 
+##### Update Password complexity - Admin[Token Required]
+`http://127.0.0.1:5000/update_pwd_criteria`
 
+ 
+
+------------
+
+### Normal User Tasks
+##### View the password complexity[Token Not Required] 
+ `http://127.0.0.1:5000/get_pwd_criteria`
+
+##### Signin  to system 
+ `http://127.0.0.1:5000/signup`
+ `{
+	"username":"sam",
+	"password":"Ab@#123sJK7",
+	"email":"sam@gmail.com"
+}`
+##### Login to system using master password
+`http://127.0.0.1:5000/login`
+`{
+	"email": "sam@gmail.com",
+	"password": "Ab@#123sJK7"
+}`
+##### View System Legacy application list[Token Required]
+ `http://127.0.0.1:5000/app_list`
+
+##### Add New Legacy app Password [Token Required] - Main task of the PMS
+`http://127.0.0.1:5000/add_pwd`
+ `{
+	"password":"1@##D$D5fAcbA!",
+	"app_id":1,
+}`
+
+##### Get all passwords for current logged user [Token Required]
+`http://127.0.0.1:5000/pwd_list`

@@ -13,8 +13,9 @@ These instructions will get you a copy of the project up and running on your loc
 - ##### Check pip version `$ pip --version`
 - ##### Clone the project `$ git clone https://github.com/Rajitha-Madushan-Fernando/password-management-system.git`
 -  ##### Install python virtual environment `pip install pipenv`
-- #####  Activate Python environment `pipenv shell` 
 - #####  Install required packages  `pip install -r requirements.txt` 
+- #####  Activate Python environment `pipenv shell` 
+
 
 ### Now you ready to run the application
 

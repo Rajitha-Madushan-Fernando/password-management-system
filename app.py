@@ -60,7 +60,7 @@ def required_params(schema):
 
 
 # User registration module
-@app.route('/signin', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 @required_params(UserSchema())
 def register():
 

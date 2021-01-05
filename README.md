@@ -26,7 +26,7 @@ This  password management system contain two environment variables. Test and Dev
 	$env:FLASK_ENV = 'test'
 	python -m unittest
 ##### Linux
-	export FLASK_ENV='test'
+	export FLASK_ENV=test
 	python -m unittest
 
 #### Run the system under Development environment
@@ -34,7 +34,7 @@ This  password management system contain two environment variables. Test and Dev
 	$env:FLASK_ENV = 'development'
 	python -m unittest
 ##### Linux
-	export FLASK_ENV='development'
+	export FLASK_ENV=development
 	python -m unittest
 
 ##### Note : Depends on your requirement you need to change the environment. Otherwise system will generate errors. Ex: If you want to use the system and check the functionalities, Then you cannot use Test environment. You need to change it to **Development environment**.

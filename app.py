@@ -1,5 +1,5 @@
 from database_config import *
-import base64
+
 # Import user defined libs
 from password_module.password import Password
 from password_module.pwd_complex_edit import PasswordComplexityEdit
@@ -219,6 +219,30 @@ def get_pwd():
         return response
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
+
+@app.route('/update_pwd/<int:id>', methods=['PUT'])
+def update_pwd(id):
+    try:
+        req_data = request.get_json()
+        id = req_data['id']
+        password = req_data['password']
+
+        hibp_result = Password.check_hibp(password)
+        is_complexity, complexity_result_msg = Password.check_complexity(password)
+        encry_result = Password.encrypt_password(password)
+        #return encry_result
+        if is_complexity is False:
+            return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
+
+        elif hibp_result is True:
+            return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+
+        result = PasswordList.update_pwd(id,encry_result)
+        return jsonify({"Message": "Succesfuly Updated"}), 201
+
+    except (KeyError, exceptions.BadRequest):
+        return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again')
+
 # Password module end
 
 

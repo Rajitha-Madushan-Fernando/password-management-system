@@ -78,6 +78,12 @@ class PasswordList(db.Model):
         else:
             return False
 
+    #Update password
+    def update_pwd(_id,_password):
+        update = db.session.query(PasswordList).filter(PasswordList.id == _id).update({PasswordList.password:_password}, synchronize_session = False)
+        db.session.commit()  # commit changes to session
+        return True
+
     #Convert to json object and render to front end | In this case
     def json(self):
         return {

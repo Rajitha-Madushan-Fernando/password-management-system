@@ -33,10 +33,10 @@ This  password management system contain two environment variables. Test and Dev
 #### Run the system under Development environment
 ##### Windows 
 	$env:FLASK_ENV = 'development'
-	python -m unittest
+	python app.py
 ##### Linux
 	export FLASK_ENV=development
-	python -m unittest
+	python app.py
 
 ##### Note : Depends on your requirement you need to change the environment. Otherwise system will generate errors. Ex: If you want to use the system and check the functionalities, Then you cannot use Test environment. You need to change it to **Development environment**.
 ------------

@@ -9,6 +9,7 @@
 #Developer : Rajitha Fernando
 import unittest
 from json import dumps, loads, load
+import os
 import requests
 import json
 from app import app, db
@@ -32,7 +33,7 @@ class AppTest(unittest.TestCase):
         response = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",
-                "password": "34D*&%Wgsju!",
+                "password": os.getenv("test_admin_pwd"),
             }), content_type='application/json'
         )
         reponse_data = loads(response.data)
@@ -46,7 +47,7 @@ class AppTest(unittest.TestCase):
         resp_login = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",
-                "password": "34D*&%Wgsju!",
+                "password": os.getenv("test_admin_pwd"),
             }),content_type='application/json'
         )
         reponse_data = loads(resp_login.data)
@@ -73,7 +74,7 @@ class AppTest(unittest.TestCase):
         resp_login = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",
-                "password": "34D*&%Wgsju!",
+                "password": os.getenv("test_admin_pwd"),
             }),content_type='application/json'
         )
         reponse_data = loads(resp_login.data)
@@ -102,7 +103,7 @@ class AppTest(unittest.TestCase):
         response = self.app.post('/login', 
             data = dumps({
                 "email":"test@yahoo.com",
-                "password": "34D*&%Wgsju!",
+                "password": os.getenv("test_admin_pwd"),
             }), content_type='application/json'
         )
         reponse_data = loads(response.data)

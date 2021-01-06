@@ -131,7 +131,6 @@ def login():
     email = request_data['email']
     entered_password = request_data['password']
     # Do password verification
-    
     user = UserList.check_login(email)
     try:
         if user:

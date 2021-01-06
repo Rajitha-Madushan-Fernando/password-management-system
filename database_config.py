@@ -24,11 +24,15 @@ from Cryptodome.Cipher import AES
 #Load envirement variables
 load_dotenv()
 current_env = os.environ['FLASK_ENV']
+
+csrf = CSRFProtect()
 #print(current_env)
 
 
 #init app
 app = Flask(__name__)
+app.config['WTF_CSRF_ENABLED'] = False
+csrf.init_app(app)
 schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,7 +40,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, os.environ[current_env+'_DB'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-WTF_CSRF_ENABLED = True
+
 
 # Initializing our database
 db = SQLAlchemy(app)

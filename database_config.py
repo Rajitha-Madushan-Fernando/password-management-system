@@ -36,7 +36,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, os.environ[current_env+'_DB'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-WTF_CSRF_ENABLED = False
+WTF_CSRF_ENABLED = True
 
 # Initializing our database
 db = SQLAlchemy(app)

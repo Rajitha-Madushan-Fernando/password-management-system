@@ -28,7 +28,6 @@ current_env = os.environ['FLASK_ENV']
 
 #init app
 app = Flask(__name__)
-app.config['WTF_CSRF_ENABLED'] = False
 schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 

@@ -9,15 +9,17 @@
 import unittest
 import os
 from .password import Password as Password
-class PasswordTest(unittest.TestCase):
 
+
+class PasswordTest(unittest.TestCase):
+    
     def setUp(self):
-        self.password1 = 'password'
-        self.password2 = os.getenv("12345678")
-        self.password3 = os.getenv("ABC123456")
-        self.password4 = os.getenv("!@#$AD")
-        self.password5 = os.getenv("34D*&%Wgsju!")
-        self.password6 = os.getenv("34D*&%Wgsju!34D*&%Wgsju!34D*&%Wgsju!")
+        self.password1 = os.getenv("password1")
+        self.password2 = os.getenv("password2")
+        self.password3 = os.getenv("password3")
+        self.password4 = os.getenv("password4")
+        self.password5 = os.getenv("password5")
+        self.password6 = os.getenv("password6")
 
     def test_complexity(self):
         self.assertEqual(Password.check_complexity(self.password1), (False, 'Make sure your password contain one number'))

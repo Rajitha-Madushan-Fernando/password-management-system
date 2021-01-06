@@ -164,4 +164,8 @@ class LegacyAppSchema(Schema):
     description = fields.String(required=True)
     app_name = fields.String(required=True)
 
+class LoginUserSchema(Schema):
+    password = fields.String(required=True)
+    email = fields.String(required=True)
+
 db.create_all()

@@ -9,6 +9,7 @@ from db_models.pms_models import UserList
 from db_models.pms_models import UserSchema
 from db_models.pms_models import PasswordSchema
 from db_models.pms_models import LegacyAppSchema
+from db_models.pms_models import LoginUserSchema
 
 
 app.config['SECRET_KEY'] = os.environ[current_env+'_secretkey']
@@ -124,6 +125,7 @@ def get_users():
 
 # User login module Start
 @app.route('/login', methods=['POST'])
+@required_params(LoginUserSchema())
 def login():
     request_data = request.get_json()
     email = request_data['email']
@@ -143,12 +145,12 @@ def login():
             if Password.verify_password(entered_password, current_pwd):
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-                token = jwt.encode({"exp": expiration_date},app.config['SECRET_KEY'], algorithm="HS256").decode('utf-8')
+                token = jwt.encode({"exp": expiration_date},app.config['SECRET_KEY'], algorithm="HS256")
                 #print(type(token))
                 #print(token)
                 login_session['logged_in'] = True
                 return jsonify({
-                    'token': token,
+                    'token': token.decode('utf-8'),
                     'user-id': user.id,
                     'email': user.email,
                     'Message': Message

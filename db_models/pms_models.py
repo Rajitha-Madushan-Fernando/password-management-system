@@ -28,6 +28,7 @@ class LegacyApp(db.Model):
         return new_legacy_app
 
     #Get all legacy applications
+    @staticmethod
     def get_all_legacy_app():
         return [LegacyApp.json(legacyApp) for legacyApp in LegacyApp.query.all()]
 

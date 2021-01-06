@@ -13,8 +13,9 @@ These instructions will get you a copy of the project up and running on your loc
 - ##### Check pip version `$ pip --version`
 - ##### Clone the project `$ git clone https://github.com/Rajitha-Madushan-Fernando/password-management-system.git`
 -  ##### Install python virtual environment `pip install pipenv`
-- #####  Activate Python environment `pipenv shell` 
 - #####  Install required packages  `pip install -r requirements.txt` 
+- #####  Activate Python environment `pipenv shell` 
+
 
 ### Now you ready to run the application
 
@@ -23,7 +24,7 @@ This  password management system contain two environment variables. Test and Dev
 
 #### Run the system under Test environment | Run the unit test cases
 ##### Windows 
-	$env:FLASK_ENV = test
+	$env:FLASK_ENV = 'test'
 	python -m unittest
 ##### Linux
 	export FLASK_ENV=test
@@ -31,11 +32,11 @@ This  password management system contain two environment variables. Test and Dev
 
 #### Run the system under Development environment
 ##### Windows 
-	$env:FLASK_ENV = development
-	python -m unittest
+	$env:FLASK_ENV = 'development'
+	python app.py
 ##### Linux
 	export FLASK_ENV=development
-	python -m unittest
+	python app.py
 
 ##### Note : Depends on your requirement you need to change the environment. Otherwise system will generate errors. Ex: If you want to use the system and check the functionalities, Then you cannot use Test environment. You need to change it to **Development environment**.
 ------------

@@ -125,14 +125,13 @@ def get_users():
 
 # User login module Start
 @app.route('/login', methods=['POST'])
-@csrf.exempt
 @required_params(LoginUserSchema())
 def login():
     request_data = request.get_json()
     email = request_data['email']
     entered_password = request_data['password']
     # Do password verification
-
+    
     user = UserList.check_login(email)
     try:
         if user:

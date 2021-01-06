@@ -63,7 +63,6 @@ def required_params(schema):
 
 # User registration module
 @app.route('/signup', methods=['POST'])
-@csrf.exempt
 @required_params(UserSchema())
 def register():
 
@@ -126,7 +125,6 @@ def get_users():
 
 # User login module Start
 @app.route('/login', methods=['POST'])
-@csrf.exempt
 @required_params(LoginUserSchema())
 def login():
     request_data = request.get_json()
@@ -176,7 +174,6 @@ def login():
 
 # Password module start
 @app.route('/add_pwd', methods=['POST'])
-@csrf.exempt
 @token_required
 @required_params(PasswordSchema())
 def add_new_pwd():
@@ -224,7 +221,6 @@ def get_pwd():
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
 @app.route('/update_pwd/<int:base_id>', methods=['PUT'])
-@csrf.exempt
 @token_required
 def update_pwd(base_id):
     try:
@@ -253,7 +249,6 @@ def update_pwd(base_id):
 
 # Legacy Application module
 @app.route('/add_new_legacy_app', methods=['POST'])
-@csrf.exempt
 @token_required
 @required_params(LegacyAppSchema())
 def add_legacy_app():
@@ -297,7 +292,6 @@ def get_complexity():
 
 
 @app.route('/update_pwd_criteria', methods=['POST'])
-@csrf.exempt
 @token_required
 def update_complexity():
     request_data = request.get_json()

@@ -29,7 +29,8 @@ current_env = os.environ['FLASK_ENV']
 
 #init app
 app = Flask(__name__)
-csrf = CSRFProtect(app)
+#csrf = CSRFProtect(app)
+#csrf.init_app(app) 
 schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 

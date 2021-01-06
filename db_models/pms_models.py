@@ -70,7 +70,14 @@ class PasswordList(db.Model):
         result = [PasswordList.json(record) for record in PasswordList.query.filter(PasswordList.user_id==_user_id).all()]
         return result
 
-    
+    #Check the password and application combination is already created or not
+    def check_app_id_user_id(_app_id, _user_id):
+        result = PasswordList.query.filter_by(app_id=_app_id,user_id=_user_id).first()
+        if result is None:
+            return True
+        else:
+            return False
+
     #Convert to json object and render to front end | In this case
     def json(self):
         return {

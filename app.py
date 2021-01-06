@@ -185,22 +185,26 @@ def add_new_pwd():
 
         appIsExist = LegacyApp.check_app_id(app_id)
         if appIsExist is True:
-            # user defined functions
-            hibp_result = Password.check_hibp(user_password)
-            is_complexity, complexity_result_msg = Password.check_complexity(user_password)
-            encry_result = Password.encrypt_password(user_password)
-            #return encry_result
-            if is_complexity is False:
-                return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
+            app_user_id_exist = PasswordList.check_app_id_user_id(app_id,user_id)
+            if app_user_id_exist is True:
+                # user defined functions
+                hibp_result = Password.check_hibp(user_password)
+                is_complexity, complexity_result_msg = Password.check_complexity(user_password)
+                encry_result = Password.encrypt_password(user_password)
+                #return encry_result
+                if is_complexity is False:
+                    return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
 
-            elif hibp_result is True:
-                return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+                elif hibp_result is True:
+                    return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
+                else:
+                    response = PasswordList.add_app_pwd(encry_result, user_id, app_id)
+                    return jsonify({"Message": "Succesfuly saved"}), 201
             else:
-                response = PasswordList.add_app_pwd(encry_result, user_id, app_id)
-                return jsonify({"Message": "Succesfuly saved"}), 201
+                return jsonify({"Error": "You already created the password for this application."}), 401
         else:
-            return jsonify({"Message": "The entered app id is not in the database"}), 401
+            return jsonify({"Error": "The entered app id is not in the database"}), 401
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')

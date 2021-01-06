@@ -123,6 +123,7 @@ class UserList(db.Model):
         return new_user
     
     #Get all registered users list
+    @staticmethod
     def get_all_users():
         user_list= [UserList.json(userApp) for userApp in UserList.query.all()]
         return user_list

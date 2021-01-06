@@ -220,9 +220,9 @@ def get_pwd():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 
-@app.route('/update_pwd/<int:id>', methods=['PUT'])
+@app.route('/update_pwd/<int:base_id>', methods=['PUT'])
 @token_required
-def update_pwd(id):
+def update_pwd(base_id):
     try:
         req_data = request.get_json()
         id = req_data['id']

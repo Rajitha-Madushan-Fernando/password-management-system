@@ -226,9 +226,9 @@ def update_pwd(id):
         req_data = request.get_json()
         id = req_data['id']
         password = req_data['password']
-
-        hibp_result = Password.check_hibp(password)
+        
         is_complexity, complexity_result_msg = Password.check_complexity(password)
+        hibp_result = Password.check_hibp(password)
         encry_result = Password.encrypt_password(password)
         #return encry_result
         if is_complexity is False:

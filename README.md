@@ -97,13 +97,11 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 	"password":"1@##D$D5fAcbA!",
 	"app_id":1,
 }`
-
-##### Update the exsisting password [Token Required]
+##### Add New Legacy app Password [Token Required] - Main task of the PMS
 `http://127.0.0.1:5000/update_pwd/{id}`
  `{
- 	"app_id":1,
-	"password":"1@##D$D5fAcbA!"
-	
+	"password":"1@##D$D5f!cbA!",
+	"app_id":1,
 }`
 
 ##### Get all passwords for current logged user [Token Required]

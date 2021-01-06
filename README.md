@@ -97,7 +97,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 	"password":"1@##D$D5fAcbA!",
 	"app_id":1,
 }`
-##### Add New Legacy app Password [Token Required] - Main task of the PMS
+##### Update the exsiting password [Token Required][PUT]
 `http://127.0.0.1:5000/update_pwd/{id}`
  `{
 	"password":"1@##D$D5f!cbA!",

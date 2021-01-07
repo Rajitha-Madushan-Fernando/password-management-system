@@ -145,7 +145,7 @@ class UserList(db.Model):
             return user
 
     #When system admin change the password complexity update user pasword criteria status= 0
-    @staticmethod
+    
     def update_user_satus():
         update = db.session.query(UserList).filter(UserList.passwordCriteraStatus == 1).update({UserList.passwordCriteraStatus:0}, synchronize_session = False)
         db.session.commit()  # commit changes to session

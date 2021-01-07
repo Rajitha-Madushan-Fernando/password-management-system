@@ -11,7 +11,6 @@ import datetime
 import uuid
 from functools import wraps
 from flask import session as login_session
-from flask_wtf.csrf import CSRFProtect
 
 # Exception lib
 from werkzeug import exceptions
@@ -31,8 +30,6 @@ current_env = os.environ['FLASK_ENV']
 
 #init app
 app = Flask(__name__)
-csrf = CSRFProtect()
-csrf.init_app(app)
 schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 

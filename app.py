@@ -30,7 +30,7 @@ def token_required(f):
 
             token = jwt.decode(token, app.config['SECRET_KEY'],algorithms=["HS256"])
             return f(*args,  **kwargs)
-        except:
+        except (KeyError, exceptions.BadRequest):
             return jsonify({
                 'Error Meesage': "Your token is expired! Please login in again"
             }), 401

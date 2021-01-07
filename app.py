@@ -121,8 +121,6 @@ def get_users():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # User list retrive module end
-from flask_wtf.csrf import generate_csrf
-
 
 # User login module Start
 @app.route('/login', methods=['POST'])

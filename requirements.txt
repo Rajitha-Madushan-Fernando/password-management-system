@@ -19,4 +19,3 @@ python-dotenv
 pyhibp
 pycryptodomex
 flask-unittest
-Flask-WTF

@@ -1,5 +1,6 @@
 from database_config import *
 
+
 # Import user defined libs
 from password_module.password import Password
 from password_module.pwd_complex_edit import PasswordComplexityEdit
@@ -58,7 +59,6 @@ def required_params(schema):
         return wrapper
     return decorator
 ##Input validation
-
 
 
 # User registration module
@@ -121,6 +121,7 @@ def get_users():
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again.')
 # User list retrive module end
+from flask_wtf.csrf import generate_csrf
 
 
 # User login module Start

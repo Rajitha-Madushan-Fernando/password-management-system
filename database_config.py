@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, request, Response, jsonify, make_response
+from flask import Flask, request, Response, jsonify, make_response,render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow import Schema, fields, ValidationError

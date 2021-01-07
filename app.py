@@ -143,12 +143,12 @@ def login():
             if Password.verify_password(entered_password, current_pwd):
                 login_session['id'] = user.id
                 expiration_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-                token = jwt.encode({"exp": expiration_date},app.config['SECRET_KEY'], algorithm="HS256")
+                token = jwt.encode({"exp": expiration_date},app.config['SECRET_KEY'], algorithm="HS256").decode('utf-8')
                 #print(type(token))
                 #print(token)
                 login_session['logged_in'] = True
                 return jsonify({
-                    'token': token.decode('utf-8'),
+                    'token': token,
                     'user-id': user.id,
                     'email': user.email,
                     'Message': Message

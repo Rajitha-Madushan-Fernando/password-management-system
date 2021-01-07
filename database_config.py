@@ -25,13 +25,13 @@ from Cryptodome.Cipher import AES
 load_dotenv()
 current_env = os.environ['FLASK_ENV']
 
-csrf = CSRFProtect()
+
 #print(current_env)
 
 
 #init app
 app = Flask(__name__)
-app.config['WTF_CSRF_ENABLED'] = False
+csrf = CSRFProtect()
 csrf.init_app(app)
 schema = JsonSchema(app)
 basedir = os.path.abspath(os.path.dirname(__file__))

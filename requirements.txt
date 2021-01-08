@@ -6,7 +6,7 @@ flask-migrate
 flask-script
 marshmallow
 flask-bcrypt
-pyjwt
+pyjwt==2.0.0
 flask-json
 flask-restless
 requests

@@ -54,7 +54,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 	"password": "123DEs!678"
 }`
 
-##### Create new legacy application - Admin[Token Required]
+##### Add new legacy application to system - Admin[Token Required]
 `http://127.0.0.1:5000/add_new_legacy_app`
  `{
     "app_name":"HRM",
@@ -91,7 +91,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 ##### View System Legacy application list[Token Required]
  `http://127.0.0.1:5000/app_list`
 
-##### Add New Legacy app Password [Token Required] - Main task of the PMS
+##### Create new Password [Token Required] - Main task of the PMS
 `http://127.0.0.1:5000/add_pwd`
  `{
 	"password":"1@##D$D5fAcbA!",
@@ -104,5 +104,5 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 	"app_id":1,
 }`
 
-##### Get all passwords for current logged user [Token Required]
+##### Get all passwords list for current logged user [Token Required]
 `http://127.0.0.1:5000/pwd_list`

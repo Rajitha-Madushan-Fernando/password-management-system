@@ -98,10 +98,11 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 	"app_id":1,
 }`
 ##### Update the exsiting password [Token Required][PUT]
-`http://127.0.0.1:5000/update_pwd/{id}`
+`http://127.0.0.1:5000/update_pwd`
  `{
-	"password":"1@##D$D5f!cbA!",
-	"app_id":1,
+	"id":1,
+	"password":"1@##D$D5f!cbA!"
+	
 }`
 
 ##### Get all passwords list for current logged user [Token Required]

@@ -224,19 +224,26 @@ def update_pwd():
         req_data = request.get_json()
         id = req_data['id']
         password = req_data['password']
+        user_id = login_session['id']
         
-        is_complexity, complexity_result_msg = Password.check_complexity(password)
-        hibp_result = Password.check_hibp(password)
-        encry_result = Password.encrypt_password(password)
-        #return encry_result
-        if is_complexity is False:
-            return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
+        #Check this id and user_id combination is exists or not
+        check_user_id_primary_id = PasswordList.check_uid_pid(id, user_id)
+        #Check the return value
+        if check_user_id_primary_id is False:
+            return jsonify(Process='Invalid action!', Process_Message='Please select correct ID!')
+        else:
+            is_complexity, complexity_result_msg = Password.check_complexity(password)
+            hibp_result = Password.check_hibp(password)
+            encry_result = Password.encrypt_password(password)
+            #return encry_result
+            if is_complexity is False:
+                return jsonify(Process='ERROR!', Process_Message=complexity_result_msg)
 
-        elif hibp_result is True:
-            return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
+            elif hibp_result is True:
+                return jsonify(Process='ERROR!', Process_Message='This password is already in HIBP Database.')
 
-        result = PasswordList.update_pwd(id,encry_result)
-        return jsonify({"Message": "Succesfuly Updated"}), 201
+            result = PasswordList.update_pwd(id,encry_result)
+            return jsonify({"Message": "Succesfuly Updated"}), 201
 
     except (KeyError, exceptions.BadRequest):
         return jsonify(Process='ERROR!', Process_Message='Your token is expired! Please login in again')

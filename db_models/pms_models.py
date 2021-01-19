@@ -79,6 +79,14 @@ class PasswordList(db.Model):
         else:
             return False
 
+    #Check the updatable person id and primary id combination is exists or not
+    def check_uid_pid(_id, _user_id):
+        result = PasswordList.query.filter_by(id=_id, user_id=_user_id).first()
+        if result is None:
+            return False
+        else:
+            return True
+
     #Update password
     def update_pwd(_id,_password):
         update = db.session.query(PasswordList).filter(PasswordList.id == _id).update({PasswordList.password:_password}, synchronize_session = False)

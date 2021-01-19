@@ -150,8 +150,6 @@ def login():
                 login_session['logged_in'] = True
                 return jsonify({
                     'token': token,
-                    'user-id': user.id,
-                    'email': user.email,
                     'Message': Message
 
                 }), 200

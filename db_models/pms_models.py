@@ -192,4 +192,10 @@ class LoginUserSchema(Schema):
     password = fields.String(required=True)
     email = fields.String(required=True)
 
+class UpdatePasswordSchema(Schema):
+    #Primary id should be integer and required field
+    id = fields.Integer(required=True)
+    #Password should be String and required field
+    password = fields.String(required=True)
+
 db.create_all()

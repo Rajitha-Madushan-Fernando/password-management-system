@@ -11,6 +11,7 @@ from db_models.pms_models import UserSchema
 from db_models.pms_models import PasswordSchema
 from db_models.pms_models import LegacyAppSchema
 from db_models.pms_models import LoginUserSchema
+from db_models.pms_models import UpdatePasswordSchema
 
 
 app.config['SECRET_KEY'] = os.environ[current_env+'_secretkey']
@@ -181,7 +182,9 @@ def add_new_pwd():
         app_id = req_data['app_id']
 
         appIsExist = LegacyApp.check_app_id(app_id)
-        if appIsExist is True:
+        if user_password == "":
+            return jsonify(Process='Invalid action!', Process_Message='Please Enter your password!')
+        elif appIsExist is True:
             app_user_id_exist = PasswordList.check_app_id_user_id(app_id,user_id)
             if app_user_id_exist is True:
                 # user defined functions
@@ -219,7 +222,7 @@ def get_pwd():
 
 @app.route('/update_pwd', methods=['PUT'])
 @token_required
-@required_params(PasswordSchema())
+@required_params(UpdatePasswordSchema())
 def update_pwd():
     try:
         req_data = request.get_json()
@@ -232,6 +235,8 @@ def update_pwd():
         #Check the return value
         if check_user_id_primary_id is False:
             return jsonify(Process='Invalid action!', Process_Message='Please select correct ID!')
+        elif password == "":
+            return jsonify(Process='Invalid action!', Process_Message='Please Enter your password!')
         else:
             is_complexity, complexity_result_msg = Password.check_complexity(password)
             hibp_result = Password.check_hibp(password)

@@ -219,6 +219,7 @@ def get_pwd():
 
 @app.route('/update_pwd', methods=['PUT'])
 @token_required
+@required_params(PasswordSchema())
 def update_pwd():
     try:
         req_data = request.get_json()

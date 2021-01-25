@@ -67,6 +67,17 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 ##### Update Password complexity - Admin[Token Required][POST]
 `http://127.0.0.1:5000/update_pwd_criteria`
 
+`{
+    "charaterType": "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()?/.<>,{}[]:;|\\`'`_-+= ",  
+    "existLowerCase": true,  
+    "existNumber": true,  
+    "existSpecialCharacter": true,  
+    "existUpperCase": true,  
+    "lastUpdatedDate": "2020-12-09",  
+    "maxLength": 16,  
+    "minLength": 8,  
+    "specialCharaterList": "!@#$%^&*()?/.<>,{}[]:;|\\`'`_-+="  
+}`
  
 
 ------------

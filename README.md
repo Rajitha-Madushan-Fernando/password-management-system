@@ -49,6 +49,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 ### Admin  Tasks
 ##### Login to system using master password - Admin[POST]
 `http://127.0.0.1:5000/login`
+<br/>
 `{
 	"email": "admin@admin.com",
 	"password": "123DEs!678"
@@ -56,6 +57,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 
 ##### Add new legacy application to system - Admin[Token Required][POST]
 `http://127.0.0.1:5000/add_new_legacy_app`
+<br/>
  `{
     "app_name":"HRM",
     "url":"www.sample.com",
@@ -66,7 +68,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 
 ##### Update Password complexity - Admin[Token Required][POST]
 `http://127.0.0.1:5000/update_pwd_criteria`
-
+<br/>
 `{
     "charaterType": "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()?/.<>,{}[]:;|\\`'`_-+= ",  
     "existLowerCase": true,  
@@ -88,6 +90,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 
 ##### Signup/Create new User profile[POST]
  `http://127.0.0.1:5000/signup`
+ <br/>
  `{
 	"username":"sam",
 	"password":"Ab@#123sJK7",
@@ -95,6 +98,7 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 }`
 ##### Login to system using master password[POST]
 `http://127.0.0.1:5000/login`
+<br/>
 `{
 	"email": "sam@gmail.com",
 	"password": "Ab@#123sJK7"
@@ -104,12 +108,14 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 
 ##### Create new Password [Token Required][POST] - Main task of the PMS
 `http://127.0.0.1:5000/add_pwd`
+<br/>
  `{
 	"password":"1@##D$D5fAcbA!",
 	"app_id":1
 }`
 ##### Update the exsiting password [Token Required][PUT]
 `http://127.0.0.1:5000/update_pwd`
+<br/>
  `{
 	"id":1,
 	"password":"1@##D$D5f!cbA!"

@@ -148,11 +148,10 @@ def login():
                 token = jwt.encode({"exp": expiration_date},app.config['SECRET_KEY'], algorithm="HS256")
                 #print(type(token))
                 #print(token)
-                login_session['logged_in'] = True
+                #login_session['logged_in'] = True
                 return jsonify({
-                    'token': token,
+                    'Token': token,
                     'Message': Message
-
                 }), 200
             else:
                 error_message = "Your username or password is invalid"

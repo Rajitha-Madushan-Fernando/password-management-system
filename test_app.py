@@ -38,7 +38,6 @@ class AppTest(unittest.TestCase):
         )
         reponse_data = loads(response.data)
         self.token = reponse_data['token']
-        self.assertEqual(reponse_data["email"], "test@yahoo.com")
         self.assertEqual(response.status_code, 200)
 
     #Test Complexity update as a ADMIN user without having a proper Token(JWT)

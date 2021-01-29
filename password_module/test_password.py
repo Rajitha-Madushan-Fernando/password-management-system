@@ -53,7 +53,6 @@ class PasswordTest(unittest.TestCase):
     def test_encrypt_decrypt_pwd(self):
         #Using python cryptodome encrypt and decrypt functions to store password securely.
         cipher_text = Password.encrypt_password(self.password5)
-        self.assertTrue(type(cipher_text) == bytes ) 
         decrypt_text = Password.decrypt_pwd(cipher_text)
         #Test same password with encrypt and decrypt functions
         self.assertTrue(decrypt_text == self.password5)

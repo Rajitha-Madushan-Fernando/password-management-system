@@ -47,63 +47,80 @@ This system functions mainly devided to two categories. **ADMIN** and **USER**. 
 `x-access-tokens :  "your token goes here"`
 
 ### Admin  Tasks
-##### Login to system using master password - Admin
+##### Login to system using master password - Admin[POST]
 `http://127.0.0.1:5000/login`
+<br/>
 `{
 	"email": "admin@admin.com",
 	"password": "123DEs!678"
 }`
 
-##### Add new legacy application to system - Admin[Token Required]
+##### Add new legacy application to system - Admin[Token Required][POST]
 `http://127.0.0.1:5000/add_new_legacy_app`
+<br/>
  `{
     "app_name":"HRM",
     "url":"www.sample.com",
     "description":"Sample data"
 }`
-##### View all registered User list - Admin[Token Required]
+##### View all registered User list - Admin[Token Required][GET]
 `http://127.0.0.1:5000/all_users`
 
-##### Update Password complexity - Admin[Token Required]
+##### Update Password complexity - Admin[Token Required][POST]
 `http://127.0.0.1:5000/update_pwd_criteria`
-
+<br/>
+`{
+    "charaterType": "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()?/.<>,{}[]:;|\\`'`_-+= ",  
+    "existLowerCase": true,  
+    "existNumber": true,  
+    "existSpecialCharacter": true,  
+    "existUpperCase": true,  
+    "lastUpdatedDate": "2020-12-09",  
+    "maxLength": 16,  
+    "minLength": 8,  
+    "specialCharaterList": "!@#$%^&*()?/.<>,{}[]:;|\\`'`_-+="  
+}`
  
 
 ------------
 
 ### Normal User Tasks
-##### View the password complexity[Token Not Required] 
+##### View the password complexity[Token Not Required][GET] 
  `http://127.0.0.1:5000/get_pwd_criteria`
 
-##### Signin  to system 
+##### Signup/Create new User profile[POST]
  `http://127.0.0.1:5000/signup`
+ <br/>
  `{
 	"username":"sam",
 	"password":"Ab@#123sJK7",
 	"email":"sam@gmail.com"
 }`
-##### Login to system using master password
+##### Login to system using master password[POST]
 `http://127.0.0.1:5000/login`
+<br/>
 `{
 	"email": "sam@gmail.com",
 	"password": "Ab@#123sJK7"
 }`
-##### View System Legacy application list[Token Required]
+##### View System Legacy application list[Token Required][GET]
  `http://127.0.0.1:5000/app_list`
 
-##### Create new Password [Token Required] - Main task of the PMS
+##### Create new Password [Token Required][POST] - Main task of the PMS
 `http://127.0.0.1:5000/add_pwd`
+<br/>
  `{
 	"password":"1@##D$D5fAcbA!",
-	"app_id":1,
+	"app_id":1
 }`
-##### Update the exsiting password [Token Required]{PUT}
+##### Update the exsiting password [Token Required][PUT]
 `http://127.0.0.1:5000/update_pwd`
+<br/>
  `{
 	"id":1,
-	"password":"1@##D$D5f!cbA!",
+	"password":"1@##D$D5f!cbA!"
 }`
 
 
-##### Get all passwords list for current logged user [Token Required]
+##### Get all passwords list for current logged user [Token Required][GET]
 `http://127.0.0.1:5000/pwd_list`

@@ -37,7 +37,7 @@ class AppTest(unittest.TestCase):
             }), content_type='application/json'
         )
         reponse_data = loads(response.data)
-        self.token = reponse_data['token']
+        self.token = reponse_data['Token']
         self.assertEqual(response.status_code, 200)
 
     #Test Complexity update as a ADMIN user without having a proper Token(JWT)
@@ -50,7 +50,7 @@ class AppTest(unittest.TestCase):
             }),content_type='application/json'
         )
         reponse_data = loads(resp_login.data)
-        self.token = reponse_data['token']
+        self.token = reponse_data['Token']
 
         response = self.app.post('/update_pwd_criteria',
             data = dumps({
@@ -77,7 +77,7 @@ class AppTest(unittest.TestCase):
             }),content_type='application/json'
         )
         reponse_data = loads(resp_login.data)
-        self.token = reponse_data['token']
+        self.token = reponse_data['Token']
 
         response = self.app.post('/update_pwd_criteria',
             data = dumps({
